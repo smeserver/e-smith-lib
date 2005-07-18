@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.1
-%define release 43
+%define release 43sme01
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -49,6 +49,7 @@ Patch36: e-smith-lib-1.15.1-39.mitel_patch
 Patch37: e-smith-lib-1.15.1-41.mitel_patch
 Patch38: e-smith-lib-1.15.1-42.mitel_patch
 Patch39: e-smith-lib-1.15.1-43.mitel_patch
+Patch40: e-smith-lib-1.15.1-dbmoved.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -71,6 +72,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Sun Jul 17 2005 Shad L. Lords <slords@mail.com>
+- [1.15.1-43sme01]
+- Preparations for db moving
+
 * Tue Jun 21 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.1-43]
 - Ensure that esmith::util::LdapPassword returns bare string without
@@ -1482,7 +1487,7 @@ Split of Tai64n package from main e-smith-lib
 
 * Fri Feb 15 2002 Kirrily Robert <skud@e-smith.com>
 - [1.9.1-02]
-- removed unnecessary rmdir from %prep section of specfile
+- removed unnecessary rmdir from prep section of specfile
 
 * Fri Feb 15 2002 Kirrily Robert <skud@e-smith.com>
 - [1.9.1-01]
@@ -2462,6 +2467,7 @@ of template sources of unknown size in sequence.
 %patch37 -p1
 %patch38 -p1
 %patch39 -p1
+%patch40 -p1
 
 %pre
 # Remove legacy symlink if one exists
