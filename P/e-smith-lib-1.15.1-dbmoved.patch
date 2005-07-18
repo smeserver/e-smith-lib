@@ -1,0 +1,281 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/etc/e-smith/tests/10e-smith-lib/configuration.conf mezzanine_patched_e-smith-lib-1.15.1/root/etc/e-smith/tests/10e-smith-lib/configuration.conf
+--- e-smith-lib-1.15.1/root/etc/e-smith/tests/10e-smith-lib/configuration.conf	2003-05-28 15:36:04.000000000 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/etc/e-smith/tests/10e-smith-lib/configuration.conf	2005-07-17 20:12:35.238995976 -0600
+@@ -36,7 +36,7 @@
+ LocalNetmask=255.255.255.0
+ MinUid=5000
+ PasswordSet=yes
+-PreviousConfiguration=/home/e-smith/configuration.previous
++PreviousConfiguration=/home/e-smith/db/configuration.previous
+ SMTPSmartHost=
+ SambaDomainMaster=no
+ SambaServerName=pretz
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/sbin/e-smith/db mezzanine_patched_e-smith-lib-1.15.1/root/sbin/e-smith/db
+--- e-smith-lib-1.15.1/root/sbin/e-smith/db	2003-09-02 15:05:26.000000000 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/sbin/e-smith/db	2005-07-17 20:12:15.494997520 -0600
+@@ -129,17 +129,14 @@
+ ";
+ 
+ #--------------------------------------------------------------------------
+-# Parse the db filename and make sure it points to an absolute path
+-
+-my $dbpath = $ENV{'DBPATH'};
+-$dbpath = "/home/e-smith" unless defined $dbpath;
+-$dbpath = "/home/e-smith" unless $dbpath =~ /^\//;
++# Prepend $ENV{'DBPATH'} to dbfile if defined otherwise let the library
++# deal with it.
+ 
+ my $dbfile = shift;
+ die $usage unless $dbfile;
+ 
+-$dbfile = "${dbpath}/${dbfile}"
+-    unless $dbfile =~ /^\//;
++my $dbpath = $ENV{'DBPATH'};
++$dbfile = "$dbpath/$dbfile" if defined $dbpath;
+ 
+ #--------------------------------------------------------------------------
+ # Tie the databasefile to a hash
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm	2005-07-17 20:18:59.897598120 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm	2005-07-17 20:12:56.535758376 -0600
+@@ -75,15 +75,14 @@
+ 
+ sub open {
+     my($class, $file) = @_;
+-    $file = $file || $ENV{ESMITH_ACCOUNT_DB} || "/home/e-smith/accounts";
++    $file = $file || $ENV{ESMITH_ACCOUNT_DB} || "accounts";
+     return $class->SUPER::open($file);
+ }
+ 
+ =head2 open_ro()
+ 
+ Like esmith::DB->open_ro, but if given no $file it will try to open the
+-file in the ESMITH_ACCOUNT_DB environment variable or
+-/home/e-smith/accounts.
++file in the ESMITH_ACCOUNT_DB environment variable or accounts.
+ 
+ =begin testing
+ 
+@@ -93,7 +92,7 @@
+ 
+ sub open_ro {
+     my($class, $file) = @_;
+-    $file = $file || $ENV{ESMITH_ACCOUNT_DB} || "/home/e-smith/accounts";
++    $file = $file || $ENV{ESMITH_ACCOUNT_DB} || "accounts";
+     return $class->SUPER::open_ro($file);
+ }
+ 
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/ConfigDB.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/ConfigDB.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/ConfigDB.pm	2005-07-17 20:18:58.577798760 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/ConfigDB.pm	2005-07-17 20:14:24.696495736 -0600
+@@ -67,8 +67,7 @@
+ =head2 open()
+ 
+ Like esmith::DB->open, but if given no $file it will try to open the
+-file in the ESMITH_CONFIG_DB environment variable or
+-/home/e-smith/configuration.
++file in the ESMITH_CONFIG_DB environment variable or configuration.
+ 
+ =begin testing
+ 
+@@ -106,15 +105,14 @@
+ sub open
+ {
+     my ( $class, $file ) = @_;
+-    $file = $file || $ENV{ESMITH_CONFIG_DB} || "/home/e-smith/configuration";
++    $file = $file || $ENV{ESMITH_CONFIG_DB} || "configuration";
+     return $class->SUPER::open($file);
+ }
+ 
+ =head2 open_ro()
+ 
+ Like esmith::DB->open_ro, but if given no $file it will try to open the
+-file in the ESMITH_CONFIG_DB environment variable or
+-/home/e-smith/configuration.
++file in the ESMITH_CONFIG_DB environment variable or configuration.
+ 
+ =begin testing
+ 
+@@ -125,7 +123,7 @@
+ sub open_ro
+ {
+     my ( $class, $file ) = @_;
+-    $file = $file || $ENV{ESMITH_CONFIG_DB} || "/home/e-smith/configuration";
++    $file = $file || $ENV{ESMITH_CONFIG_DB} || "configuration";
+     return $class->SUPER::open_ro($file);
+ }
+ 
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/config.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/config.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/config.pm	2005-07-17 20:19:00.358528048 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/config.pm	2005-07-17 20:14:48.992080936 -0600
+@@ -12,7 +12,7 @@
+ use Sys::Syslog qw(:DEFAULT setlogsock);
+ use Fcntl qw(:DEFAULT :flock);
+ 
+-my $Default_Config = '/home/e-smith/configuration';
++my $Default_Config = 'configuration';
+ 
+ =pod
+ 
+@@ -70,7 +70,7 @@
+ deletes are immediately written back to the $config_file.
+ 
+ If no $config_file is supplied it falls back to the environment variable 
+-ESMITH_CONFIG_DB, and finally defaults to F</home/e-smith/configuration>
++ESMITH_CONFIG_DB, and finally defaults to F<configuration>
+ 
+ If the $config_file doesn't exist it will create one for you.
+ 
+@@ -359,7 +359,7 @@
+ 
+ #------------------------------------------------------------
+ # Constructor for the tied hash. If filename not specified,
+-# defaults to '/home/e-smith/configuration'.
++# defaults to 'configuration'.
+ #------------------------------------------------------------
+ 
+ sub TIEHASH
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/db.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/db.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/db.pm	2004-01-07 14:32:13.000000000 -0700
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/db.pm	2005-07-17 20:16:18.883034664 -0600
+@@ -525,7 +525,7 @@
+ 
+   $db->open( 'configuration' );
+               or
+-  $db->open( '/home/e-smith/configuration' );
++  $db->open( '/path/to/configuration' );
+ 
+ =cut
+ 
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DomainsDB.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DomainsDB.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DomainsDB.pm	2005-07-17 20:18:58.584797696 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DomainsDB.pm	2005-07-17 20:16:47.803679656 -0600
+@@ -35,8 +35,7 @@
+ =head2 open()
+ 
+ Like esmith::DB->open, but if given no $file it will try to open the
+-file in the ESMITH_DOMAINS_DB environment variable or
+-/home/e-smith/domains.
++file in the ESMITH_DOMAINS_DB environment variable or domains.
+ 
+ =begin testing
+ 
+@@ -53,15 +52,14 @@
+ 
+ sub open {
+     my ($self, $file) = @_;
+-    $file = $file || $ENV{ESMITH_DOMAINS_DB} || "/home/e-smith/domains";
++    $file = $file || $ENV{ESMITH_DOMAINS_DB} || "domains";
+     return $self->SUPER::open($file);
+ }
+ 
+ =head2 open_ro()
+ 
+ Like esmith::DB->open_ro, but if given no $file it will try to open the
+-file in the ESMITH_DOMAINS_DB environment variable or
+-/home/e-smith/domains.
++file in the ESMITH_DOMAINS_DB environment variable or domains.
+ 
+ =begin testing
+ 
+@@ -71,7 +69,7 @@
+ 
+ sub open_ro {
+     my($class, $file) = @_;
+-    $file = $file || $ENV{ESMITH_DOMAINS_DB} || "/home/e-smith/domains";
++    $file = $file || $ENV{ESMITH_DOMAINS_DB} || "domains";
+     return $class->SUPER::open_ro($file);
+ }
+ =for testing
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/HostsDB.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/HostsDB.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/HostsDB.pm	2005-07-17 20:18:58.587797240 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/HostsDB.pm	2005-07-17 20:17:55.927585000 -0600
+@@ -43,8 +43,7 @@
+ =item I<open>
+ 
+ Like esmith::DB->open, but if given no $file it will try to open the
+-file in the ESMITH_HOSTS_DB environment variable or
+-/home/e-smith/hosts.
++file in the ESMITH_HOSTS_DB environment variable or hosts.
+ 
+ =begin testing
+ 
+@@ -61,15 +60,14 @@
+ 
+ sub open {
+     my($class, $file) = @_;
+-    $file = $file || $ENV{ESMITH_HOSTS_DB} || "/home/e-smith/hosts";
++    $file = $file || $ENV{ESMITH_HOSTS_DB} || "hosts";
+     return $class->SUPER::open($file);
+ }
+ 
+ =head2 open_ro()
+ 
+ Like esmith::DB->open_ro, but if given no $file it will try to open the
+-file in the ESMITH_HOSTS_DB environment variable or
+-/home/e-smith/hosts.
++file in the ESMITH_HOSTS_DB environment variable or hosts.
+ 
+ =begin testing
+ 
+@@ -79,7 +77,7 @@
+ 
+ sub open_ro {
+     my($class, $file) = @_;
+-    $file = $file || $ENV{ESMITH_HOSTS_DB} || "/home/e-smith/hosts";
++    $file = $file || $ENV{ESMITH_HOSTS_DB} || "hosts";
+     return $class->SUPER::open_ro($file);
+ }
+ =back
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/NetworksDB.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/NetworksDB.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/NetworksDB.pm	2005-07-17 20:18:58.591796632 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/NetworksDB.pm	2005-07-17 20:18:12.652445296 -0600
+@@ -35,8 +35,7 @@
+ =head2 open()
+ 
+ Like esmith::DB->open, but if given no $file it will try to open the
+-file in the ESMITH_NETWORKS_DB environment variable or
+-/home/e-smith/networks.
++file in the ESMITH_NETWORKS_DB environment variable or networks.
+ 
+ =begin testing
+ 
+@@ -54,15 +53,14 @@
+ sub open
+ {
+     my ( $class, $file ) = @_;
+-    $file = $file || $ENV{ESMITH_NETWORKS_DB} || "/home/e-smith/networks";
++    $file = $file || $ENV{ESMITH_NETWORKS_DB} || "networks";
+     return $class->SUPER::open($file);
+ }
+ 
+ =head2 open_ro()
+ 
+ Like esmith::DB->open_ro, but if given no $file it will try to open the
+-file in the ESMITH_NETWORKS_DB environment variable or
+-/home/e-smith/networks.
++file in the ESMITH_NETWORKS_DB environment variable or networks.
+ 
+ =begin testing
+ 
+@@ -73,7 +71,7 @@
+ sub open_ro
+ {
+     my ( $class, $file ) = @_;
+-    $file = $file || $ENV{ESMITH_NETWORKS_DB} || "/home/e-smith/networks";
++    $file = $file || $ENV{ESMITH_NETWORKS_DB} || "networks";
+     return $class->SUPER::open_ro($file);
+ }
+ 
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/templates.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/templates.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/templates.pm	2005-07-17 20:19:00.470511024 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/templates.pm	2005-07-17 20:18:24.656616208 -0600
+@@ -72,7 +72,7 @@
+ =back
+ 
+ In addition, each record in the default esmith configuration database
+-(/home/e-smith/configuration) is available as a hash if it has
++(configuration) is available as a hash if it has
+ multiple properties (where each key/value is a property of the record)
+ or if it has a single property (type) then it given as a scalar.
+ 

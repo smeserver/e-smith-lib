@@ -1,0 +1,12 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB/db.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB/db.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB/db.pm	2005-07-18 02:09:00.159438608 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB/db.pm	2005-07-18 02:03:29.816864112 -0600
+@@ -217,7 +217,7 @@
+ {
+     my ( $class, $file ) = @_;
+ 
+-    if ($file =~ m:^/:)
++    if ($file =~ m:/:)
+     {
+ 	warn "Pathname passed to _file_path($file)";
+ 	return $file;

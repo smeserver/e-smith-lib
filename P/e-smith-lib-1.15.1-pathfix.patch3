@@ -1,0 +1,12 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/config.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/config.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/config.pm	2005-07-18 04:43:36.620916368 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/config.pm	2005-07-18 04:43:23.456917600 -0600
+@@ -12,7 +12,7 @@
+ use Sys::Syslog qw(:DEFAULT setlogsock);
+ use Fcntl qw(:DEFAULT :flock);
+ 
+-my $Default_Config = 'configuration';
++my $Default_Config = '/home/e-smith/db/configuration';
+ 
+ =pod
+ 

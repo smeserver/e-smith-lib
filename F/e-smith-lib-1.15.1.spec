@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.1
-%define release 44
+%define release 44sme01
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -50,6 +50,11 @@ Patch37: e-smith-lib-1.15.1-41.mitel_patch
 Patch38: e-smith-lib-1.15.1-42.mitel_patch
 Patch39: e-smith-lib-1.15.1-43.mitel_patch
 Patch40: e-smith-lib-1.15.1-44.mitel_patch
+Patch41: e-smith-lib-1.15.1-dbmoved.patch
+Patch42: e-smith-lib-1.15.1-dbmoved.patch2
+Patch43: e-smith-lib-1.15.1-pathfix.patch
+Patch44: e-smith-lib-1.15.1-pathfix.patch2
+Patch45: e-smith-lib-1.15.1-pathfix.patch3
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -72,6 +77,17 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
+- [1.15.1-44sme01]
+- Reapply db move patches
+- Put back explicit path to (new) location of configuration
+  db for esmith::config users (e.g. from console)
+- Remove anchor from _file_path so that test code can still
+  generate test dbs with relative paths.
+- Fix default db checking and and warnings
+- Move dbs to /home/e-smith/db
+- Preparations for db moving
+
 * Fri Jul 15 2005 Mark Knox <markk@e-smith.com>
 - [1.15.1-44]
 - Tweak to allow calling _writeconf from SOAP [markk MN00090738]
@@ -1487,7 +1503,7 @@ Split of Tai64n package from main e-smith-lib
 
 * Fri Feb 15 2002 Kirrily Robert <skud@e-smith.com>
 - [1.9.1-02]
-- removed unnecessary rmdir from %prep section of specfile
+- removed unnecessary rmdir from prep section of specfile
 
 * Fri Feb 15 2002 Kirrily Robert <skud@e-smith.com>
 - [1.9.1-01]
@@ -2468,6 +2484,11 @@ of template sources of unknown size in sequence.
 %patch38 -p1
 %patch39 -p1
 %patch40 -p1
+%patch41 -p1
+%patch42 -p1
+%patch43 -p1
+%patch44 -p1
+%patch45 -p1
 
 %pre
 # Remove legacy symlink if one exists
