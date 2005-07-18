@@ -42,3 +42,9 @@ Mon Jul 18 10:58:21 2005                           Shad Lords (slords)
 More path clean up stuff
 
 ----------------------------------------------------------------------
+Mon Jul 18 13:35:20 2005                           Shad Lords (slords)
+
+Cleanup warnings with db initialize
+Default to new db location
+
+----------------------------------------------------------------------

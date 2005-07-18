@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.1
-%define release 44sme02
+%define release 44sme03
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -56,6 +56,7 @@ Patch43: e-smith-lib-1.15.1-pathfix.patch
 Patch44: e-smith-lib-1.15.1-pathfix.patch2
 Patch45: e-smith-lib-1.15.1-pathfix.patch3
 Patch46: e-smith-lib-1.15.1-pathfix.patch4
+Patch47: e-smith-lib-1.15.1-pathfix.patch5
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -78,6 +79,11 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
+- [1.15.1-44sme03]
+- Cleanup warnings on initialize database
+- Default to new database location
+
 * Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
 - [1.15.1-44sme02]
 - Another path fixup patch
@@ -2495,6 +2501,7 @@ of template sources of unknown size in sequence.
 %patch44 -p1
 %patch45 -p1
 %patch46 -p1
+%patch47 -p1
 
 %pre
 # Remove legacy symlink if one exists

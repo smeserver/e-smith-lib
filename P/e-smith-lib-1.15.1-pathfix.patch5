@@ -1,0 +1,50 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB/db.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB/db.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB/db.pm	2005-07-18 13:21:55.044847520 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB/db.pm	2005-07-18 13:21:37.397201056 -0600
+@@ -225,10 +225,12 @@
+ 
+     if (-e "/home/e-smith/db/$file")
+     {
+-	return "/home/e-smith/db/$file" if (-e "/home/e-smith/db/$file");
+-    } else {
+-	warn "Database not found in new location /home/e-smith/db/$file";
++	return "/home/e-smith/db/$file";
++    } elsif (-e "/home/e-smith/$file") {
++	warn "Database found in old location /home/e-smith/$file";
+ 	return "/home/e-smith/$file";
++    } else {
++	return "/home/e-smith/db/$file";
+     }
+ }
+ 
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/db.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/db.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/db.pm	2005-07-18 13:21:54.994905120 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/db.pm	2005-07-18 13:21:22.928887776 -0600
+@@ -711,10 +711,12 @@
+ 
+     if (-e "/home/e-smith/db/$file")
+     {
+-	return "/home/e-smith/db/$file" if (-e "/home/e-smith/db/$file");
+-    } else {
+-	warn "Database not found in new location /home/e-smith/db/$file";
++	return "/home/e-smith/db/$file";
++    } elsif (-e "/home/e-smith/$file") {
++	warn "Database found in old location /home/e-smith/$file";
+ 	return "/home/e-smith/$file";
++    } else {
++	return "/home/e-smith/db/$file";
+     }
+ }
+ 
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB.pm	2005-07-18 13:21:54.204816352 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/DB.pm	2005-07-18 13:19:53.743017176 -0600
+@@ -453,7 +453,7 @@
+         {
+             processTemplate(
+                 {
+-                    MORE_DATA             => { 'DB_FILENAME' => $self->{file} },
++                    MORE_DATA             => { 'DB_FILENAME' => $dbfile },
+                     TEMPLATE_PATH         => '',
+                     OUTPUT_TYPE           => 'string',
+                     TEMPLATE_EXPAND_QUEUE =>
