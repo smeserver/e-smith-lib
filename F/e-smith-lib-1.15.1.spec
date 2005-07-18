@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.1
-%define release 43sme02
+%define release 43sme03
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -51,6 +51,7 @@ Patch38: e-smith-lib-1.15.1-42.mitel_patch
 Patch39: e-smith-lib-1.15.1-43.mitel_patch
 Patch40: e-smith-lib-1.15.1-dbmoved.patch
 Patch41: e-smith-lib-1.15.1-dbmoved.patch2
+Patch42: e-smith-lib-1.15.1-pathfix.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -73,6 +74,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Sun Jul 17 2005 Shad L. Lords <slords@mail.com>
+- [1.15.1-43sme03]
+- Fix default db checking and and warnings
+
 * Sun Jul 17 2005 Shad L. Lords <slords@mail.com>
 - [1.15.1-43sme02]
 - Move dbs to /home/e-smith/db
@@ -2474,6 +2479,7 @@ of template sources of unknown size in sequence.
 %patch39 -p1
 %patch40 -p1
 %patch41 -p1
+%patch42 -p1
 
 %pre
 # Remove legacy symlink if one exists
