@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.1
-%define release 43sme04
+%define release 43sme05
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -53,6 +53,7 @@ Patch40: e-smith-lib-1.15.1-dbmoved.patch
 Patch41: e-smith-lib-1.15.1-dbmoved.patch2
 Patch42: e-smith-lib-1.15.1-pathfix.patch
 Patch43: e-smith-lib-1.15.1-pathfix.patch2
+Patch44: e-smith-lib-1.15.1-pathfix.patch3
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -75,6 +76,11 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Mon Jul 18 2005 Gordon Rowell <gordonr@gormand.com.au>
+- [1.15.1-43sme05]
+- Put back explicit path to (new) location of configuration
+  db for esmith::config users (e.g. from console)
+
 * Mon Jul 18 2005 Gordon Rowell <gordonr@gormand.com.au>
 - [1.15.1-43sme04]
 - Remove anchor from _file_path so that test code can still
@@ -2487,6 +2493,7 @@ of template sources of unknown size in sequence.
 %patch41 -p1
 %patch42 -p1
 %patch43 -p1
+%patch44 -p1
 
 %pre
 # Remove legacy symlink if one exists

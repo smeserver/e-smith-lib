@@ -22,3 +22,8 @@ Mon Jul 18 02:12:57 2005                       Gordon Rowell (gordonr)
 Don't anchor the pattern, so test code can write relative dbs
 
 ----------------------------------------------------------------------
+Mon Jul 18 04:51:06 2005                       Gordon Rowell (gordonr)
+
+Explicit path for esmith::config usage
+
+----------------------------------------------------------------------
