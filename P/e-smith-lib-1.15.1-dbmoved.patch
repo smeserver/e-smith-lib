@@ -31,7 +31,7 @@ diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/sbin/e-smith/db mezzani
 -$dbfile = "${dbpath}/${dbfile}"
 -    unless $dbfile =~ /^\//;
 +my $dbpath = $ENV{'DBPATH'};
-+$dbfile = "$dbpatch/$dbfile" if defined $dbpath;
++$dbfile = "$dbpath/$dbfile" if defined $dbpath;
  
  #--------------------------------------------------------------------------
  # Tie the databasefile to a hash
