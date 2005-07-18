@@ -1,0 +1,12 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm:1.32 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm:1.33
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm:1.32	Thu May  5 14:10:41 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm	Fri Jul 15 17:32:12 2005
+@@ -232,6 +232,7 @@
+ 
+ sub _writeconf ($$)
+ {
++    shift while($#_ > 1);
+     my ($filename, $config) = @_;
+ 
+     eval {
