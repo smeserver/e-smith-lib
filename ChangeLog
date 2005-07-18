@@ -17,3 +17,8 @@ Mon Jul 18 01:27:45 2005                           Shad Lords (slords)
 DB patch fix with warnings
 
 ----------------------------------------------------------------------
+Mon Jul 18 02:12:57 2005                       Gordon Rowell (gordonr)
+
+Don't anchor the pattern, so test code can write relative dbs
+
+----------------------------------------------------------------------
