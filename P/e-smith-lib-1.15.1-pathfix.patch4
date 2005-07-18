@@ -1,0 +1,50 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/util.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/util.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/util.pm	2005-07-18 10:55:41.131382720 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/util.pm	2005-07-18 10:55:11.451613248 -0600
+@@ -1272,11 +1272,14 @@
+     # Optionally take an argument to the db root, for testing purposes.
+     my %defaults = (
+         dbroot => '/etc/e-smith/db',
+-        dbhome => '/home/e-smith/db'
++        dbhome => '/home/e-smith/db',
++        old_dbhome => '/home/e-smith',
+     );
+     my %args   = ( %defaults, @_ );
+     my $dbroot = $args{dbroot};
+     my $dbhome = $args{dbhome};
++    my $old_dbhome = $args{old_dbhome};
++
+     local *DH;
+     opendir DH, $dbroot
+       or die "Could not open $dbroot: $!";
+@@ -1299,7 +1302,20 @@
+ 
+         eval
+         {
+-            my $h = esmith::ConfigDB->open("$dbhome/$file");
++            if (-f "${old_dbhome}/$file")
++            {
++                if (-f "${dbhome}/$file")
++                {
++                    warn "${old_dbhome}/$file and ${dbhome}/$file exist\n";
++                }
++                else
++                {
++                    warn "Rename ${old_dbhome}/$file => ${dbhome}/$file\n";
++                    rename "${old_dbhome}/$file", "${dbhome}/$file";
++                }
++            }
++
++            my $h = esmith::ConfigDB->open($file);
+             if ($h)
+             {
+                 warn "Migrating existing database $file\n";
+@@ -1317,7 +1333,7 @@
+                 warn "Creating database $file and setting defaults\n";
+ 
+                 # create() and load defaults
+-                unless ( $h = esmith::ConfigDB->create("$dbhome/$file") )
++                unless ( $h = esmith::ConfigDB->create($file) )
+                 {
+                     warn "Could not create $file db: " . esmith::DB->error;
+                 }
