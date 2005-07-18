@@ -1,0 +1,152 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm:1.51 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm:1.52
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm:1.51	Thu Dec 23 17:52:25 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm	Mon Feb  7 17:43:07 2005
+@@ -414,9 +414,6 @@
+         # open the target file before servicing the template queue
+         ##########################################################
+ 
+-        my $perms = $p{'PERMS'};
+-        $perms = oct($perms) if $perms =~ /^0/;
+-
+         if ( -d "$outputfile" ) {
+             croak "ERROR: Could not expand $outputfile template "
+               . "- it is a directory\n";
+@@ -426,7 +423,7 @@
+         require POSIX;
+         my $fd =
+           POSIX::open( $tempfile,
+-            &POSIX::O_CREAT | &POSIX::O_WRONLY | &POSIX::O_TRUNC, $perms )
++            &POSIX::O_CREAT | &POSIX::O_WRONLY | &POSIX::O_TRUNC, 0600)
+           || croak "ERROR: Cannot create output file " . "$tempfile $!\n";
+ 
+         # create a filehandle reference to the newly opened file
+@@ -444,52 +441,6 @@
+             $fh  = IO::File->new_tmpfile;
+         }
+ 
+-        # error checking and conversions for uid
+-        my $uid = $p{'UID'};
+-        if ( $uid =~ /^\d+$/ ) {
+-            unless ( defined getpwuid $uid ) {
+-                carp "WARNING: Invalid user: ${uid}, "
+-                  . "defaulting to 'root' user (0).\n";
+-                $uid = 0;
+-            }
+-        }
+-        else {
+-            my $uname = $uid;
+-            $uid = getpwnam $uid;
+-            unless ( defined $uid ) {
+-                carp "WARNING: Invalid user: ${uname}, "
+-                  . "defaulting to 'root' user (0).\n";
+-                $uid = 0;
+-            }
+-        }
+-
+-        # error checking and conversions for gid
+-        my $gid = $p{'GID'};
+-        if ( $gid =~ /^\d+$/ ) {
+-            unless ( defined getgrgid $gid ) {
+-                carp "WARNING: Invalid group: ${gid}, "
+-                  . "defaulting to 'root' group (0).\n";
+-                $gid = 0;
+-            }
+-        }
+-        else {
+-            my $gname = $gid;
+-            $gid = getgrnam $gid;
+-            unless ( defined $gid ) {
+-                carp "WARNING: Invalid group: ${gname}, "
+-                  . "defaulting to 'root' group (0).\n";
+-                $gid = 0;
+-            }
+-        }
+-
+-        # now do chown on our new target
+-        chown( $uid, $gid, $tempfile )
+-          || croak "ERROR:  Can't chown file $tempfile: $!\n";
+-
+-        # Now do chmod as well - POSIX::open does not change permissions
+-        # of a preexisting file
+-        chmod( $perms, $tempfile )
+-          || croak "ERROR: Can't chmod file $tempfile: $!\n";
+     }
+ 
+     # Construct a hash containing mapping each template fragment
+@@ -633,6 +584,56 @@
+         # NOTE: this is not an atomic operation, so on a non-journaling
+         # filesystem it is possible that the template could become corrupt
+ 
++        my $perms = $p{'PERMS'};
++        $perms = oct($perms) if $perms =~ /^0/;
++
++        # error checking and conversions for uid
++        my $uid = $p{'UID'};
++        if ( $uid =~ /^\d+$/ ) {
++            unless ( defined getpwuid $uid ) {
++                carp "WARNING: Invalid user: ${uid}, "
++                  . "defaulting to 'root' user (0).\n";
++                $uid = 0;
++            }
++        }
++        else {
++            my $uname = $uid;
++            $uid = getpwnam $uid;
++            unless ( defined $uid ) {
++                carp "WARNING: Invalid user: ${uname}, "
++                  . "defaulting to 'root' user (0).\n";
++                $uid = 0;
++            }
++        }
++
++        # error checking and conversions for gid
++        my $gid = $p{'GID'};
++        if ( $gid =~ /^\d+$/ ) {
++            unless ( defined getgrgid $gid ) {
++                carp "WARNING: Invalid group: ${gid}, "
++                  . "defaulting to 'root' group (0).\n";
++                $gid = 0;
++            }
++        }
++        else {
++            my $gname = $gid;
++            $gid = getgrnam $gid;
++            unless ( defined $gid ) {
++                carp "WARNING: Invalid group: ${gname}, "
++                  . "defaulting to 'root' group (0).\n";
++                $gid = 0;
++            }
++        }
++
++	# now do chown on our new target
++	chown( $uid, $gid, $tempfile )
++	  || croak "ERROR:  Can't chown file $tempfile: $!\n";
++
++	# Now do chmod as well - POSIX::open does not change permissions
++	# of a preexisting file
++	chmod( $perms, $tempfile )
++	  || croak "ERROR: Can't chmod file $tempfile: $!\n";
++	
+         unless ( -f $outputfile ) {
+             rename( "$tempfile", "$outputfile" )
+               or croak(
+@@ -654,11 +655,18 @@
+             $debug_template_expansion
+               && warn("Not updating $outputfile - unchanged\n");
+             unlink "$tempfile";
++
++	    # now do chown and chmod the file, to ensure permissions are correct
++	    chown( $uid, $gid, $outputfile )
++	      || croak "ERROR:  Can't chown file $tempfile: $!\n";
++	    chmod( $perms, $outputfile )
++	      || croak "ERROR: Can't chmod file $tempfile: $!\n";
+         }
+         else {
+             $debug_template_expansion
+               && warn(
+                 "Updating $outputfile - MD5 was $oldMD5sum, now $newMD5sum\n");
++
+             rename( "$tempfile", "$outputfile" )
+               or croak(
+                 "ERROR: Could not rename $tempfile " . "to $outputfile: $!\n" );

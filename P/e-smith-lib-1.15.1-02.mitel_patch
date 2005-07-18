@@ -1,0 +1,43 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/I18N.pm:1.13 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/I18N.pm:1.14
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/I18N.pm:1.13	Tue Sep  2 16:05:26 2003
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/I18N.pm	Fri Jun 25 11:28:45 2004
+@@ -12,7 +12,7 @@
+ use POSIX qw(setlocale LC_ALL LC_CTYPE);
+ use Locale::gettext;
+ use I18N::AcceptLanguage;
+-use I18N::LangTags qw(is_language_tag locale2language_tag language_tag2locale);
++use I18N::LangTags qw(is_language_tag locale2language_tag);
+ 
+ =pod
+ 
+@@ -202,7 +202,7 @@
+ 
+     if (is_language_tag($opt))
+     {
+-	$locale = language_tag2locale($opt) || $self->fallbackLocale;
++	$locale = _language_tag2locale($opt) || $self->fallbackLocale;
+ 
+ 	unless (-d "/usr/lib/locale/$locale")
+ 	{
+@@ -217,6 +217,20 @@
+     }
+ 
+     return $locale;
++}
++
++sub _language_tag2locale
++{
++    my $langtags = $_[0];
++    my @locales;
++    foreach my $maybe (split /[\n\r\t ,]+/, $langtags) 
++    {
++        push @locales,
++        lc($1) . ( $2 ? ('_' . uc($2)) : '' )
++            if $maybe =~ m/^([a-zA-Z]{2})(?:-([a-zA-Z]{2}))?$/s;
++    }
++    return $locales[0] unless wantarray; # might be undef!
++        return @locales;  # might be empty!
+ }
+ 
+ =head2 availableLanguages()

@@ -1,0 +1,136 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u /dev/null e-smith-lib/root/etc/e-smith/events/actions/adjust-services:1.2
+--- /dev/null	Tue Jan 25 10:46:20 2005
++++ e-smith-lib/root/etc/e-smith/events/actions/adjust-services	Tue Jan 25 10:45:17 2005
+@@ -0,0 +1,109 @@
++#!/usr/bin/perl -w
++#----------------------------------------------------------------------
++# copyright (C) 2005 Mitel Networks Corporation
++# 
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++# 		
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++# 		
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
++# 
++#----------------------------------------------------------------------
++package esmith;
++
++use strict;
++use Errno;
++use DirHandle;
++
++my $event = shift || die "must give event name parameter";
++chdir "/etc/e-smith/events/$event" or die "Couldn't chdir to event directory /etc/e-smith/events/$event: $!";
++my $dh = DirHandle->new("services2adjust");
++
++exit(0) unless $dh; # Nothing to do
++
++use esmith::ConfigDB;
++use esmith::util;
++
++my %param2char = (
++	down => 'd',
++	stop => 'd',
++	up => 'u',
++	start => 'u',
++	restart => 't',
++	sigterm => 't',
++	adjust => 'h',
++	reload => 'h',
++	sighup => 'h',
++	sigusr1 => '1',
++	sigusr2 => '2',
++	once => 'o',
++	pause => 'p',
++	alarm => 'a',
++	interrupt => 'i',
++	quit => 'q',
++	kill => 'k',
++	exit => 'x',
++    );
++
++sub adjust_supervised_service
++{
++    my ($s, $p) = @_;
++    my $c = $param2char{$p};
++    my $m = "control fifo for service $s: ";
++    unless ($c)
++    {
++	warn "Unrecognised param $p for service $s\n";
++	return;
++    }
++    unless (open(C, ">/service/$s/supervise/control"))
++    {
++	warn "Couldn't open $m$!";
++	return;
++    }
++    unless (print C $c)
++    {
++	warn "Couldn't write to $m$!";
++	return;
++    }
++    warn  "Couldn't close $m$!" unless close(C);
++}
++
++my $conf = esmith::ConfigDB->open_ro || die "Couldn't open config db";
++
++my %services;
++
++foreach my $service (grep { !/^\./ } $dh->read())
++{
++    my $s = $conf->get($service);
++    unless ($s)
++    {
++	warn "No conf db entry for service $service\n";
++	next;
++    }
++    if (-d "/service/$service")
++    {
++	my $enabled = ($s->prop('status') || 'disabled') eq 'enabled';
++	# stop the service if it is now disabled
++	adjust_supervised_service($service, "down") unless ($enabled);
++	# Send the specified signal to the running daemon
++	adjust_supervised_service($service, readlink "services2adjust/$service");
++	# bring the service up if it is enabled
++	adjust_supervised_service($service, "up") if ($enabled);
++    }
++    else
++    {
++	esmith::util::serviceControl(
++		NAME => $service,
++		ACTION => readlink "services2adjust/$service"
++	    );
++    }
++}
++
+Index: e-smith-lib/root/usr/lib/perl5/site_perl/esmith/event.pm
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/event.pm:1.13 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/event.pm:1.14
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/event.pm:1.13	Fri Feb 13 20:29:52 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/event.pm	Tue Jan 25 10:45:17 2005
+@@ -27,7 +27,7 @@
+ 
+ =cut
+ 
+-our $VERSION = sprintf '%d.%03d', q$Revision: 1.12 $ =~ /: (\d+).(\d+)/;
++our $VERSION = sprintf '%d.%03d', q$Revision: 1.13 $ =~ /: (\d+).(\d+)/;
+ our @ISA         = qw(Exporter);
+ our @EXPORT      = qw(event_signal);
+ 
+@@ -94,7 +94,7 @@
+         }
+         else
+         {
+-            print LOG "Skipping unknown event handler: $filename";
++            print LOG "Skipping unknown event handler: $filename" unless (-d $filename);
+         }
+ 
+         my $endTime = [gettimeofday];

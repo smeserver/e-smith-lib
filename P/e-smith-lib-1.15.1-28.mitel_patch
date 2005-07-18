@@ -1,0 +1,35 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm:1.13 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm:1.14
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm:1.13	Fri Nov  5 14:45:48 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm	Tue Feb 22 12:06:01 2005
+@@ -234,6 +234,8 @@
+ {
+     my @devs;
+     my $r;
++    # Ensure that hwconf file is up to date
++    system("/usr/sbin/kudzu", "-q", "--class=network");
+     unless (open(HWC, "/etc/sysconfig/hwconf"))
+     {
+ 	warn "Could not open /etc/sysconfig/hwconf: $!";
+Index: e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm:1.25 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm:1.26
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm:1.25	Fri Sep 24 16:31:20 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm	Tue Feb 22 12:06:01 2005
+@@ -10,7 +10,7 @@
+ use warnings;
+ use Carp;
+ 
+-our $VERSION = sprintf '%d.%03d', q$Revision: 1.24 $ =~ /: (\d+).(\d+)/;
++our $VERSION = sprintf '%d.%03d', q$Revision: 1.25 $ =~ /: (\d+).(\d+)/;
+ 
+ use esmith::db;
+ use esmith::config;
+@@ -480,7 +480,7 @@
+ 
+     # with properties
+     my %defaults = ( 'type'    => 'sometype',
+-                     'linux'   => 'stable,
++                     'linux'   => 'stable',
+                      'windows' => 'stable?' );
+     my $foo = $config->new_record('foo', \%defaults);
+ 

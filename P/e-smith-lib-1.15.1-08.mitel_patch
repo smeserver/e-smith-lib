@@ -1,0 +1,75 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util/network.pm:1.16 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util/network.pm:1.17
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util/network.pm:1.16	Thu May  6 11:17:19 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util/network.pm	Wed Aug 25 12:05:37 2004
+@@ -16,6 +16,8 @@
+ );
+ 
+ use Net::IPv4Addr qw(:all);
++use Mail::RFC822::Address;
++use esmith::AccountsDB;
+ 
+ use constant TRUE  => 1;
+ use constant FALSE => 0;
+@@ -210,7 +212,7 @@
+     return 0;
+ }
+ 
+-=head isValidHostname
++=item I<isValidHostname>
+ 
+ This function returns true if it is passed a valid RFC 921 hostname,
+ false otherwise.
+@@ -250,6 +252,52 @@
+         }
+     }
+     return 1;
++}
++
++=item I<isValidEmail>
++
++This validation function validates an email address, using the
++Mail::RFC822::Address module. Additionally, by default, it permits a local
++address instead of a fully-qualified remote address, even checking the
++existence of said user in the accounts db.
++
++If you don't wish to permit local addresses, pass the permitlocal option as
++false.
++
++ie. esmith::util::isValidEmail($address, { permitlocal => 0 })
++
++=cut
++
++sub isValidEmail
++{
++    my $address = shift;
++    my $hashref = shift || {};
++    my %defaults = ( permitlocal => 1 );
++    my %options = (%defaults, %$hashref);
++
++    if (Mail::RFC822::Address::valid($address))
++    {
++        return TRUE;
++    }
++    # Permit a local address.
++    if ($address =~ /^[a-zA-Z][a-zA-Z0-9\._\-]*$/)
++    {
++        # Exception for 'admin' user. FIXME - I'd rather not hardcode this,
++        # but we can't permit email to all system users.
++        return TRUE if $address eq 'admin';
++        # Make sure the user exists.
++        my $accountsdb = esmith::AccountsDB->open_ro;
++        my $user = $accountsdb->get($address) || '';
++        unless (($user) && ($user->prop('type') eq 'user'))
++        {
++            return FALSE;
++        }
++        else
++        {
++            return TRUE;
++        }
++    }
++    return FALSE;
+ }
+ 
+ =back

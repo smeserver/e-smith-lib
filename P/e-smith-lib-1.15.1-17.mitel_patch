@@ -1,0 +1,97 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.57 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.58
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.57	Tue Aug 24 16:39:59 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm	Mon Jan 17 17:18:49 2005
+@@ -23,9 +23,6 @@
+ use File::stat;
+ use FileHandle;
+ 
+-local *LOG;
+-tie *LOG, 'esmith::Logger';
+-
+ =pod
+ 
+ =head1 NAME
+@@ -1285,70 +1282,57 @@
+       or die "Could not open $dbroot: $!";
+ 
+     my @dirs = readdir(DH);
+-    print LOG "Found the following directories at $dbroot:";
+-    foreach my $dir (@dirs)
+-    {
+-        print LOG $dir;
+-    }
+ 
+-    foreach ( grep !/^\./, @dirs )
++    foreach my $file ( grep !/^\./, @dirs )
+     {
+-        print LOG "Processing database $_\n";
+         # Untaint the result of readdir. As we're expecting filenames like
+         # 20DHCPServer and set-access-defaults, lets restrict input to those.
+-        if (/(^[A-Za-z0-9_\.-]+$)/)
++        if ($file = ~ /(^[A-Za-z0-9_\.-]+$)/)
+         {
+-            $_ = $1;
++            $file = $1;
+         }
+         else
+         {
++	    warn "Not processing unexpected file $file\n";
+             next;
+         }
+ 
+         eval
+         {
+-            my $h = esmith::ConfigDB->open("$dbhome/$_");
++            my $h = esmith::ConfigDB->open("$dbhome/$file");
+             if ($h)
+             {
+-                print LOG "Migrating existing database $_";
++                warn "Migrating existing database $file\n";
+ 
+                 # Convert old data to new format, and add any new defaults. Note
+                 # that migrate returns FALSE on fatal errors. Report those to
+                 # syslog. The error should still be in $@.
+                 unless ( $h->migrate() )
+                 {
+-                    print LOG "Migration of db $_ failed: " . esmith::DB->error;
++                    warn "Migration of db $file failed: " . esmith::DB->error;
+                 }
+             }
+             else
+             {
+-                print LOG "Creating database $_ and setting defaults";
++                warn "Creating database $file and setting defaults\n";
+ 
+                 # create() and load defaults
+-                unless ( $h = esmith::ConfigDB->create("$dbhome/$_") )
++                unless ( $h = esmith::ConfigDB->create("$dbhome/$file") )
+                 {
+-                    warn "Could not create $_ db: " . esmith::DB->error;
+-                    print LOG "Could not create $_ db: " . esmith::DB->error;
++                    warn "Could not create $file db: " . esmith::DB->error;
+                 }
+             }
+ 
+             $h->close;
+ 
+-            esmith::util::chownFile( "root", "admin", "$dbhome/$_" );
++            esmith::util::chownFile( "root", "admin", "$dbhome/$file" );
+         };
+         if ($@)
+         {
+-            warn "Fatal error while processing db $_: $@\n";
+-            print LOG "Fatal error while processing db $_: $@";
++            warn "Fatal error while processing db $file: $@\n";
+         }
+-        print LOG "Finished processing db $_";
+     }
+     return 1;
+-}
+-
+-END
+-{
+-    close LOG;
+ }
+ 
+ =head1 AUTHOR

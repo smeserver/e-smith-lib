@@ -1,0 +1,24 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm:1.1 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm:1.2
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm:1.1	Wed Mar 16 15:22:37 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm	Wed Mar 16 19:39:21 2005
+@@ -28,6 +28,7 @@
+ 
+ use esmith::NetworksDB;
+ use esmith::ConfigDB;
++use esmith::util;
+ use Carp;
+ 
+ =head2 configure_peers($service)
+@@ -36,9 +37,9 @@
+ access control and environment maipulation.  $service identifies the name
+ of the service managed by supervise or runit. The peers directory (path
+ "/var/service/$service/peers" is expected to contain files "0" defining
+-access conditions for public (default) accesss, and "locals", defining
++access conditions for public (default) accesss, and "local", defining
+ access conditions for local access. configure_peers() creates a set of
+-symlinks so that tcpsvd uses "locals" for all local network access to
++symlinks so that tcpsvd uses "local" for all local network access to
+ the service.
+ 
+ See http://smarden.org/ipsvd/ipsvd-instruct.5.html for all details of

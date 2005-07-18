@@ -1,0 +1,68 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/event.pm:1.14 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/event.pm:1.15
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/event.pm:1.14	Tue Jan 25 10:45:17 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/event.pm	Thu Jan 27 17:44:33 2005
+@@ -27,7 +27,7 @@
+ 
+ =cut
+ 
+-our $VERSION = sprintf '%d.%03d', q$Revision: 1.13 $ =~ /: (\d+).(\d+)/;
++our $VERSION = sprintf '%d.%03d', q$Revision: 1.14 $ =~ /: (\d+).(\d+)/;
+ our @ISA         = qw(Exporter);
+ our @EXPORT      = qw(event_signal);
+ 
+@@ -46,19 +46,29 @@
+         return;
+     }
+ 
+-    my $handlerDir = "/etc/e-smith/events/$event";
++    my $events = "/etc/e-smith/events";
++    my $handlerDir = "$events/$event";
+ 
+     #------------------------------------------------------------
+     # get event handler filenames
+     #------------------------------------------------------------
+     opendir (DIR, $handlerDir)
+-        || die "Can't open directory /etc/e-smith/events/$event\n";
++        || die "Can't open directory $handlerDir\n";
+ 
+-    # drop any directories (including "." and "..") 
+-    my @handlers = sort grep {! -d $_} readdir (DIR);
++    # Sort, make full path and drop any directories (including "." and "..")
++    my @handlers = grep {! -d "$_"}
++			map { "$handlerDir/$_" }
++			    sort readdir (DIR);
+ 
+     closedir (DIR);
+ 
++    # Add generic handlers to list, if their metadata directories
++    # exist
++    unshift (@handlers, "$events/actions/generic_template_expand") 
++	if ( -d "$handlerDir/templates2expand");
++    push (@handlers, "$events/actions/adjust-services") 
++	if ( -d "$handlerDir/services2adjust");
++
+     #------------------------------------------------------------
+     # Execute all handlers, sending any output to the system log.
+     #
+@@ -76,9 +86,9 @@
+     # assume success
+     my $exitcode = 1;
+ 
+-    foreach my $handler (@handlers)
++    foreach my $filename (@handlers)
+     {
+-        my $filename = "$handlerDir/$handler";
++        my $handler = basename $filename;
+         my $startTime = [gettimeofday];
+ 
+         my $status = -1;
+@@ -94,7 +104,7 @@
+         }
+         else
+         {
+-            print LOG "Skipping unknown event handler: $filename" unless (-d $filename);
++            print LOG "Skipping unknown event handler: $filename";
+         }
+ 
+         my $endTime = [gettimeofday];

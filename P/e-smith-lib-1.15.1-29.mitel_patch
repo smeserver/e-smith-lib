@@ -1,0 +1,13 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm:1.52 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm:1.53
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm:1.52	Mon Feb  7 17:43:07 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm	Tue Feb 22 16:58:03 2005
+@@ -819,7 +819,7 @@
+ 	    join '', map { $filter->("$_\n") } split ( /\n/, $_ );
+     }
+     close $ifh;
+-    $ifh = $ofh;
++    $ofh->flush;
+ }
+ 
+ # for applying filters to a text string returns the filtered text

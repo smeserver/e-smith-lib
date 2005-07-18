@@ -1,0 +1,63 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/sbin/e-smith/expand-template:1.7 e-smith-lib/root/sbin/e-smith/expand-template:1.8
+--- e-smith-lib/root/sbin/e-smith/expand-template:1.7	Tue Sep  2 17:05:26 2003
++++ e-smith-lib/root/sbin/e-smith/expand-template	Thu Dec 23 17:52:25 2004
+@@ -1,7 +1,7 @@
+ #!/usr/bin/perl -w
+ 
+ #----------------------------------------------------------------------
+-# Copyright 1999-2003 Mitel Networks Corporation
++# Copyright 1999-2004 Mitel Networks Corporation
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ #----------------------------------------------------------------------
+@@ -10,11 +10,8 @@
+ 
+ use strict;
+ use Errno;
+-use esmith::util;
+ use Getopt::Long;
+-use esmith::config;
+-
+-tie my %conf, 'esmith::config';
++use esmith::templates;
+ 
+ my %options = ();
+ 
+@@ -27,7 +24,6 @@
+ 
+ 
+ my %args = ( 
+-		CONFREF         => \%conf,
+ 		TEMPLATE_PATH   => $options{'template_path'},
+ 		OUTPUT_FILENAME => $options{'output_filename'},
+ 	    );
+@@ -46,5 +42,5 @@
+     $args{PERMS} = $f->mode;
+ }
+ 
+-esmith::util::processTemplate(\%args);
++esmith::templates::processTemplate(\%args);
+ 
+Index: e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm:1.50 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm:1.51
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm:1.50	Fri Sep 24 16:31:20 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/templates.pm	Thu Dec 23 17:52:25 2004
+@@ -349,6 +349,17 @@
+         %params_hash = %$conf_or_params_ref;
+     }
+ 
++    # Read additional metadata assocated with the templated file
++    if (open(FILE, "/etc/e-smith/templates.metadata/$params_hash{TEMPLATE_PATH}"))
++    {
++	while (<FILE>)
++	{
++	    my ($param, $value) = split(/=/, $_, 2);
++	    $params_hash{$param} = eval $value;
++	}
++	close(FILE);
++    }
++
+     # warn on deprecated or unknown parameters
+     foreach my $key ( keys %params_hash ) {
+         unless ( exists $defaults{$key} ) {

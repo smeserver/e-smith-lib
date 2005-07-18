@@ -1,0 +1,62 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm:1.10 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm:1.11
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm:1.10	Wed Oct 13 13:14:13 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm	Wed Oct 13 16:37:21 2004
+@@ -9,6 +9,7 @@
+ #----------------------------------------------------------------------
+ 
+ use strict;
++use File::Find;
+ 
+ =head1 NAME
+ 
+@@ -49,40 +50,21 @@
+     close VERSION;
+ 
+     my @modules_path = (
++        "/lib/modules/" . $kernel . "/kernel/net",
+         "/lib/modules/" . $kernel . "/kernel/drivers/net",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/net/bonding",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/net/e100",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/net/skfp",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/net/e1000",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/net/pcmcia",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/net/tokenring",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/net/tulip",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/net/wireless",
++        "/lib/modules/" . $kernel . "/kernel/drivers/addon",
+     );
+ 
+     my %network_drivers;
+-    foreach my $modules (@modules_path)
+-    {
+-        if ( -d $modules )
+-        {
+-            unless ( opendir MODULES, $modules )
+-            {
+-                warn "Could not open network modules directory $modules: $!\n";
+-                return;
+-            }
+-
+-            foreach ( readdir MODULES )
+-            {
+-                next if /^\.\.?$/;    # Ignore "." and ".."
+-                next if -d;           # Ignore directories
+-
+-                s/\.o$//;
+-                ++$network_drivers{$_};
+-            }
+ 
+-            closedir MODULES;
+-        }
++    sub find_modules
++    {
++        next if -d;
++        s/\.o$//;
++        $network_drivers{$_}++;
+     }
++
++    find (\&find_modules, @modules_path);
+ 
+     my $pcitable = "/usr/share/hwdata/pcitable";
+ 

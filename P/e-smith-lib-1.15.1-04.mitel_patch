@@ -1,0 +1,128 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB.pm:1.34 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB.pm:1.35
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB.pm:1.34	Fri May 28 17:04:42 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB.pm	Fri Aug  6 13:36:59 2004
+@@ -17,7 +17,7 @@
+ use constant TRUE  => 1;
+ use constant FALSE => 0;
+ 
+-our $VERSION = sprintf '%d.%03d', q$Revision: 1.33 $ =~ /: (\d+).(\d+)/;
++our $VERSION = sprintf '%d.%03d', q$Revision: 1.34 $ =~ /: (\d+).(\d+)/;
+ our $Error = undef;
+ 
+ local *LOG;
+@@ -37,7 +37,7 @@
+                  die esmith::DB->error;
+     my $db = esmith::DB->open($filename)   or 
+                  die esmith::DB->error;
+-    my $db = esmtih::DB->open_ro($filename) or
++    my $db = esmith::DB->open_ro($filename) or
+        	     	 die esmith::DB->error;
+ 
+     my %DB = esmith::DB->as_hash($filename) or
+@@ -53,6 +53,12 @@
+     my @all_records         = $db->get_all;
+     my @all_records_by_prop = $db->get_all_by_prop($prop => $val);
+ 
++    $db->set_prop($key, $prop, $value);
++    $db->set_value($key, $value);
++
++    $db->set_prop($key, $prop, $value, type => $type);
++    $db->set_value($key, $value, create => 0);
++
+ =head1 DESCRIPTION
+ 
+ This module is a general interface to E-Smith's databases of various
+@@ -300,6 +306,92 @@
+     my $item = $self->get(shift);
+     return undef unless $item;
+     return $item->prop(shift);
++}
++
++=item I<set_value>
++
++    $db->set_value($key, $value)[, create => 1]);
++
++Shortcut method to set a value to a key in the database without extracting the
++record first.
++
++If the record is not pre-existing, it will be created, unless the 'create'
++option is passed with a value of 0.
++
++Returns 0 for any errors, 1 for success.
++
++=cut
++
++sub set_value
++{
++    my $self = shift;
++    my ($key, $value, %options) = @_;
++
++    my %defaults = (create => 1);
++    %options = (%defaults, %options);
++
++    my $record = $self->get($key);
++    unless ($record)
++    {
++        if ($options{create})
++        {
++            $record = $self->new_record($key, {type => $value})
++                or return 0;
++        }
++        else
++        {
++            return 0;
++        }
++    }
++    else
++    {
++        $record->set_value($value);
++    }
++
++    return 1;
++}
++
++=item I<set_prop>
++
++    $db->set_prop($key, $prop, $value[, type => $type]);
++
++Shortcut method to set a property on a record without having to extract the
++record first.
++
++If the optional type option is passed, it will be used to create the record if
++it does not already exist. Otherwise, a non-existent record will cause this
++method to return an error.
++
++Returns 0 for any errors, 1 for success.
++
++=cut
++
++sub set_prop
++{
++    my $self = shift;
++    my ($key, $prop, $value, %options) = @_;
++    my %defaults = (type => '');
++    %options = (%defaults, %options);
++
++    my $record = $self->get($key);
++    unless ($record)
++    {
++        if ($options{type})
++        {
++            $record = $self->new_record($key, {type => $options{type}})
++                or return 0;
++        }
++        else
++        {
++            return 0;
++        }
++    }
++    else
++    {
++        $record->set_prop($prop, $value)
++            or return 0;
++    }
++    return 1;
+ }
+ 
+ =pod

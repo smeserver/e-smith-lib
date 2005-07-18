@@ -1,0 +1,134 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u /dev/null e-smith-lib/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm:1.1
+--- /dev/null	Wed Mar 16 15:23:49 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm	Wed Mar 16 15:22:37 2005
+@@ -0,0 +1,129 @@
++#----------------------------------------------------------------------
++# Copyright 2005 Mitel Networks Corporation
++# This program is free software; you can redistribute it and/or
++# modify it under the same terms as Perl itself.
++#----------------------------------------------------------------------
++
++package esmith::tcpsvd;
++use strict;
++
++=pod
++
++=head1 NAME
++
++esmith::tcpsvd - Manage tcpsvd "peers" directory
++
++=head1 SYNOPSIS
++
++use esmith::tcpsvd;
++
++esmith::tcpsvd::configure_peers($service)
++
++=head1 DESCRIPTION
++
++This module provides utility functions for use with tcpsvd from Gerrit
++Pape's ipsvd package - see http://smarden.org/ipsvd/.
++
++=cut
++
++use esmith::NetworksDB;
++use esmith::ConfigDB;
++use Carp;
++
++=head2 configure_peers($service)
++
++configure_peers() configures the "peers" direectory used by tcpsvd for
++access control and environment maipulation.  $service identifies the name
++of the service managed by supervise or runit. The peers directory (path
++"/var/service/$service/peers" is expected to contain files "0" defining
++access conditions for public (default) accesss, and "locals", defining
++access conditions for local access. configure_peers() creates a set of
++symlinks so that tcpsvd uses "locals" for all local network access to
++the service.
++
++See http://smarden.org/ipsvd/ipsvd-instruct.5.html for all details of
++the contents of the peers directory.
++
++=cut
++
++sub configure_peers
++{
++    my $service = shift;
++    my $peers = "/var/service/$service/peers";
++    unless (chdir $peers)
++    {
++	carp "Couldn't chdir to peers directory";
++	return;
++    }
++    unless (opendir(PEERS, '.'))
++    {
++	carp "Cannot read peers directory: $!";
++	return;
++    }
++
++    my $config = esmith::ConfigDB->open;
++    unless ($config)
++    {
++	carp "Could not open config db.";
++	return;
++    }
++    my $nets = esmith::NetworksDB->open;
++    unless ($nets)
++    {
++	carp "Could not open networks db.";
++	return;
++    }
++
++    my $gw = $config->get('GatewayIP');
++
++    # Make a list of local networks, in prefix format
++    my %nets =
++	    map
++	    {
++		$_ => 1,
++	    }
++		map
++		{
++		    esmith::util::computeAllLocalNetworkPrefixes($_->key, $_->prop('Mask'));
++		}
++		    ($nets->get_all_by_prop('type', 'network'));
++
++    $nets{'127.0.0.1'} = 1;
++
++
++    # Now manage a set of symlinks to the "local" instructions file
++    foreach my $insfile (readdir (PEERS))
++    {
++	next unless -l $insfile;
++	if (exists $nets{$insfile})
++	{
++	    # Cross this one off the list so that we don't bother creating it
++	    delete $nets{$insfile};
++	}
++	else
++	{
++	    # We no longer need this entry
++	    unlink "$insfile" or
++		warn "Could not delete dnscache access file $insfile: $!\n";
++	}
++    }
++    closedir(PEERS);
++
++    foreach my $insfile (keys %nets)
++    {
++	symlink "local", $insfile or
++	    warn "Cannot add instructions file for $insfile: $!\n";
++    }
++
++    if (defined $gw)
++    {
++	# We have a defined gateway address - make sure that the router doesn't have
++	# relay privileges
++	my $gw_ip = $gw->value;
++	unlink $gw_ip;
++	symlink "0", $gw_ip or
++	      warn "Cannot add instructions file for $gw_ip: $!\n";
++    }
++}
++
++1;

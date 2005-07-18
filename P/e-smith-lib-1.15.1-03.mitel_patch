@@ -1,0 +1,132 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.55 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.56
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.55	Fri May 28 17:04:42 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm	Tue Jul 20 16:09:01 2004
+@@ -1116,14 +1116,14 @@
+ 
+ =head2 serviceControl()
+ 
+-Manage services - enable, disable, delete, stop/start/restart/reload/graceful
++Manage services - stop/start/restart/reload/graceful
+ 
+-Returns 1 for success, 0 if something went wrong
++Returns 1 for success, 0 if something went wrong, fatal exception on bad
++arguments.
+ 
+     serviceControl(
+         NAME=>serviceName,
+-        ACTION=>enable[d]|disable[d]|delete|start|stop|restart|reload|graceful
+-        [ ORDER=>serviceOrdering (deprecated) ]
++        ACTION=>start|stop|restart|reload|graceful
+         [ BACKGROUND=>true|false (default is false) ]
+     );
+ 
+@@ -1133,29 +1133,17 @@
+ 
+ NOTES:
+ 
+-We enable/disable services as a property of the service.
+-
+-The 'd' at the end of enable/disable is optional to simplify interworking
+-with the services entries.
+-
+ The BACKGROUND parameter is optional and can be set to true if
+ start/stop/restart/etc. is to be done in the background (with
+ backgroundCommand()) rather than synchronously.
+ 
+-BUGS:
+-
+-=over 4
+-
+-=item
+-
+-We don't currently manage the Sxx and Kxx scripts - that's up to the package
+-itself
+-
+-=item
++CONVENTIONS:
+ 
+-The service name must match filename for the rc.d directory
+-
+-=back
++This command is the supported method for action scripts, blade handlers, etc.,
++to start/stop/restart their services. Currently this is done via the rc7
++symlinks, but this may change one day. Using this function gives us one
++location to change this behaviour if desired, instead of hunting all over
++every scrap of code. Please use it.
+ 
+ =cut
+ 
+@@ -1166,21 +1154,13 @@
+     my $serviceName = $params{NAME};
+     unless ( defined $serviceName )
+     {
+-        warn "serviceControl: NAME must be specified\n";
+-        return 0;
++        die "serviceControl: NAME must be specified";
+     }
+ 
+-    my $serviceOrder = $params{ORDER};
+-
+     my $serviceAction = $params{ACTION};
+-    if ( defined $serviceAction )
+-    {
+-        $serviceAction =~ s/(enable|disable)d?/$1/;
+-    }
+-    else
++    unless (defined $serviceAction)
+     {
+-        warn "serviceControl: ACTION must be specified\n";
+-        return 0;
++        die "serviceControl: ACTION must be specified";
+     }
+ 
+     if ( $serviceAction =~ /^(start|stop|restart|reload|graceful)$/ )
+@@ -1210,43 +1190,14 @@
+         }
+         else
+         {
+-            warn "serviceControl: Unsupported BACKGROUND=>$background: $!\n";
+-            return 0;
++            die "serviceControl: Unsupported BACKGROUND=>$background";
+         }
+-
+-        return 1;
+     }
+-
+-    # FIXME: Should this block even be here anymore?? This is downright
+-    # dangerous.
+-    if ( $serviceAction =~ /^(enable|delete|disable)$/ )
++    else
+     {
+-        if ( $serviceAction =~ /^(en|dis)able/ )
+-        {
+-
+-            # If we're called by an old script with an ORDER, perform the
+-            # action. Otherwise, this is a NOP.
+-            return 1 unless ($serviceOrder);
+-
+-            my $startScript = "/etc/rc.d/rc7.d/S${serviceOrder}${serviceName}";
+-            unless ( -e $startScript )
+-            {
+-                unless (
+-                    symlink( "/etc/rc.d/init.d/e-smith-service", $startScript )
+-                  )
+-                {
+-                    warn "Couldn't symlink $startScript to e-smith-service\n";
+-                    return 0;
+-                }
+-            }
+-        }
+-
+-        return 1;
++        die "serviceControl: Unknown serviceAction $serviceAction";
+     }
+-
+-    warn "serviceControl: Unknown serviceAction $serviceAction\n";
+-
+-    0;
++    return 1;
+ }
+ 
+ =head2 getLicenses()
