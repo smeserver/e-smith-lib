@@ -2,14 +2,14 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.2
-%define release 01sme01
+%define release 02
 Version: %{version}
 Release: %{release}
 License: Artistic
 Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
-Patch0: e-smith-lib-1.15.2-dbmoved.patch
+Patch0: e-smith-lib-1.15.2-02.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -32,9 +32,11 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
-* Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
-- [1.15.2-01sme01]
-- Move databases from /home/e-smith to /home/e-smith/db
+* Tue Jul 19 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.2-02]
+- Allow db open API to use default path if a simple filename
+  is provided as arg. This is reparation for move of dbs to
+  /home/e-smith/db. Patch by Shad Lords.
 
 * Mon Jul 18 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.2-01]
@@ -2395,7 +2397,7 @@ of template sources of unknown size in sequence.
 
 %prep
 %setup
-%patch -p1
+%patch0 -p1
 
 %pre
 # Remove legacy symlink if one exists
