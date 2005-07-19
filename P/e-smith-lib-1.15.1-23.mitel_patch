@@ -1,7 +1,0 @@
-Index: e-smith-lib/e-smith-lib.spec
-diff -u e-smith-lib/root/home/e-smith/web/common/edition/info.txt:1.1.1.1 e-smith-lib/root/home/e-smith/web/common/edition/info.txt:removed
---- e-smith-lib/root/home/e-smith/web/common/edition/info.txt:1.1.1.1	Fri Feb 15 13:51:17 2002
-+++ e-smith-lib/root/home/e-smith/web/common/edition/info.txt	Wed Dec 31 19:00:00 1969
-@@ -1,2 +0,0 @@
--http://www.xyzcorp.xxx/
--XYZ Corporation

@@ -1,63 +1,14 @@
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
-%define version 1.15.1
-%define release 44sme04
+%define version 1.15.2
+%define release 01
 Version: %{version}
 Release: %{release}
 License: Artistic
 Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
-Patch0: e-smith-lib-1.15.1-02.mitel_patch
-Patch1: e-smith-lib-1.15.1-03.mitel_patch
-Patch2: e-smith-lib-1.15.1-04.mitel_patch
-Patch3: e-smith-lib-1.15.1-05.mitel_patch
-Patch4: e-smith-lib-1.15.1-06.mitel_patch
-Patch5: e-smith-lib-1.15.1-07.mitel_patch
-Patch6: e-smith-lib-1.15.1-08.mitel_patch
-Patch7: e-smith-lib-1.15.1-09.mitel_patch
-Patch8: e-smith-lib-1.15.1-11.mitel_patch
-Patch9: e-smith-lib-1.15.1-12.mitel_patch
-Patch10: e-smith-lib-1.15.1-13.mitel_patch
-Patch11: e-smith-lib-1.15.1-14.mitel_patch
-Patch12: e-smith-lib-1.15.1-15.mitel_patch
-Patch13: e-smith-lib-1.15.1-16.mitel_patch
-Patch14: e-smith-lib-1.15.1-17.mitel_patch
-Patch15: e-smith-lib-1.15.1-18.mitel_patch
-Patch16: e-smith-lib-1.15.1-19.mitel_patch
-Patch17: e-smith-lib-1.15.1-20.mitel_patch
-Patch18: e-smith-lib-1.15.1-21.mitel_patch
-Patch19: e-smith-lib-1.15.1-22.mitel_patch
-Patch20: e-smith-lib-1.15.1-23.mitel_patch
-Patch21: e-smith-lib-1.15.1-24.mitel_patch
-Patch22: e-smith-lib-1.15.1-25.mitel_patch
-Patch23: e-smith-lib-1.15.1-26.mitel_patch
-Patch24: e-smith-lib-1.15.1-27.mitel_patch
-Patch25: e-smith-lib-1.15.1-28.mitel_patch
-Patch26: e-smith-lib-1.15.1-29.mitel_patch
-Patch27: e-smith-lib-1.15.1-30.mitel_patch
-Patch28: e-smith-lib-1.15.1-31.mitel_patch
-Patch29: e-smith-lib-1.15.1-32.mitel_patch
-Patch30: e-smith-lib-1.15.1-33.mitel_patch
-Patch31: e-smith-lib-1.15.1-34.mitel_patch
-Patch32: e-smith-lib-1.15.1-35.mitel_patch
-Patch33: e-smith-lib-1.15.1-36.mitel_patch
-Patch34: e-smith-lib-1.15.1-37.mitel_patch
-Patch35: e-smith-lib-1.15.1-38.mitel_patch
-Patch36: e-smith-lib-1.15.1-39.mitel_patch
-Patch37: e-smith-lib-1.15.1-41.mitel_patch
-Patch38: e-smith-lib-1.15.1-42.mitel_patch
-Patch39: e-smith-lib-1.15.1-43.mitel_patch
-Patch40: e-smith-lib-1.15.1-44.mitel_patch
-Patch41: e-smith-lib-1.15.1-dbmoved.patch
-Patch42: e-smith-lib-1.15.1-dbmoved.patch2
-Patch43: e-smith-lib-1.15.1-pathfix.patch
-Patch44: e-smith-lib-1.15.1-pathfix.patch2
-Patch45: e-smith-lib-1.15.1-pathfix.patch3
-Patch46: e-smith-lib-1.15.1-pathfix.patch4
-Patch47: e-smith-lib-1.15.1-pathfix.patch5
-Patch48: e-smith-lib-1.15.1-newnotzero.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -80,29 +31,9 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
-* Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
-- [1.15.1-44sme04]
-- Allow old database to overwrite zero length new database
-
-* Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
-- [1.15.1-44sme03]
-- Cleanup warnings on initialize database
-- Default to new database location
-
-* Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
-- [1.15.1-44sme02]
-- Another path fixup patch
-
-* Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
-- [1.15.1-44sme01]
-- Reapply db move patches
-- Put back explicit path to (new) location of configuration
-  db for esmith::config users (e.g. from console)
-- Remove anchor from _file_path so that test code can still
-  generate test dbs with relative paths.
-- Fix default db checking and and warnings
-- Move dbs to /home/e-smith/db
-- Preparations for db moving
+* Mon Jul 18 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.2-01]
+- Roll new development stream - 1.15.2
 
 * Fri Jul 15 2005 Mark Knox <markk@e-smith.com>
 - [1.15.1-44]
@@ -2459,55 +2390,6 @@ of template sources of unknown size in sequence.
 
 %prep
 %setup
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
-%patch14 -p1
-%patch15 -p1
-%patch16 -p1
-%patch17 -p1
-%patch18 -p1
-%patch19 -p1
-%patch20 -p1
-%patch21 -p1
-%patch22 -p1
-%patch23 -p1
-%patch24 -p1
-%patch25 -p1
-%patch26 -p1
-%patch27 -p1
-%patch28 -p1
-%patch29 -p1
-%patch30 -p1
-%patch31 -p1
-%patch32 -p1
-%patch33 -p1
-%patch34 -p1
-%patch35 -p1
-%patch36 -p1
-%patch37 -p1
-%patch38 -p1
-%patch39 -p1
-%patch40 -p1
-%patch41 -p1
-%patch42 -p1
-%patch43 -p1
-%patch44 -p1
-%patch45 -p1
-%patch46 -p1
-%patch47 -p1
-%patch48 -p1
 
 %pre
 # Remove legacy symlink if one exists
