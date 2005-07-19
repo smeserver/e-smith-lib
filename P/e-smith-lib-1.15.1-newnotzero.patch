@@ -1,0 +1,12 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/util.pm mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/util.pm
+--- e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/util.pm	2005-07-18 21:24:32.848804696 -0600
++++ mezzanine_patched_e-smith-lib-1.15.1/root/usr/lib/perl5/site_perl/esmith/util.pm	2005-07-18 21:24:22.561368624 -0600
+@@ -1304,7 +1304,7 @@
+         {
+             if (-f "${old_dbhome}/$file")
+             {
+-                if (-f "${dbhome}/$file")
++                if (-s "${dbhome}/$file")
+                 {
+                     warn "${old_dbhome}/$file and ${dbhome}/$file exist\n";
+                 }

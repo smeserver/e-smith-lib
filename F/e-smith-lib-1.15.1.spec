@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.1
-%define release 44sme03
+%define release 44sme04
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -57,6 +57,7 @@ Patch44: e-smith-lib-1.15.1-pathfix.patch2
 Patch45: e-smith-lib-1.15.1-pathfix.patch3
 Patch46: e-smith-lib-1.15.1-pathfix.patch4
 Patch47: e-smith-lib-1.15.1-pathfix.patch5
+Patch48: e-smith-lib-1.15.1-newnotzero.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -79,6 +80,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
+- [1.15.1-44sme04]
+- Allow old database to overwrite zero length new database
+
 * Mon Jul 18 2005 Shad L. Lords <slords@mail.com>
 - [1.15.1-44sme03]
 - Cleanup warnings on initialize database
@@ -2502,6 +2507,7 @@ of template sources of unknown size in sequence.
 %patch45 -p1
 %patch46 -p1
 %patch47 -p1
+%patch48 -p1
 
 %pre
 # Remove legacy symlink if one exists
