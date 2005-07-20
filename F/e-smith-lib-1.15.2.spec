@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.2
-%define release 02sme01
+%define release 02sme02
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -11,6 +11,7 @@ Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.15.2-02.mitel_patch
 Patch1: e-smith-lib-1.15.2-movedb.patch
+Patch2: e-smith-lib-1.15.2-movedb.patch2
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -33,6 +34,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Wed Jul 20 2005 Shad L. Lords <slords@mail.com>
+- [1.15.2-02sme02]
+- Move databases first then migrate data
+
 * Tue Jul 19 2005 Shad L. Lords <slords@mail.com>
 - [1.15.2-02sme01]
 - Move databases from /home/e-smith to /home/e-smith/db
@@ -2404,6 +2409,7 @@ of template sources of unknown size in sequence.
 %setup
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %pre
 # Remove legacy symlink if one exists
