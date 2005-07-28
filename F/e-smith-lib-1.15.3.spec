@@ -1,17 +1,15 @@
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
-%define version 1.15.2
-%define release 02sme02
+%define version 1.15.3
+%define release 02
 Version: %{version}
 Release: %{release}
 License: Artistic
 Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
-Patch0: e-smith-lib-1.15.2-02.mitel_patch
-Patch1: e-smith-lib-1.15.2-movedb.patch
-Patch2: e-smith-lib-1.15.2-movedb.patch2
+Patch0: e-smith-lib-1.15.3-02.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -34,18 +32,32 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
-* Wed Jul 20 2005 Shad L. Lords <slords@mail.com>
-- [1.15.2-02sme02]
-- Move databases first then migrate data
+* Wed Jul 27 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-02]
+- Move databases default location from /home/e-smith to /home/e-smith/db.
+  During esmith::utils::initialize_default_databases, move from old to new
+  location before doing db migrate actions. [SF: 1216546]
 
-* Tue Jul 19 2005 Shad L. Lords <slords@mail.com>
-- [1.15.2-02sme01]
-- Move databases from /home/e-smith to /home/e-smith/db
+* Wed Jul 27 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-01]
+- Roll a new development stream - 1.15.3
+
+* Wed Jul 27 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.2-04]
+- Remove broken MergeDB stuff. [SF: 1246315]
+
+* Wed Jul 27 2005 Mark Knox <markk@e-smith.com>
+- [1.15.2-03]
+- Fixed misleading comment in util.pm
+- Added 'use' statements in Record classes for SOAP compatibility
+- Fixed undefined max_len warning
+- Added explicit writeconf calls in db::Record.pm, needed for setting props
+  via SOAP
 
 * Tue Jul 19 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.2-02]
 - Allow db open API to use default path if a simple filename
-  is provided as arg. This is reparation for move of dbs to
+  is provided as arg. This is preparation for move of dbs to
   /home/e-smith/db. Patch by Shad Lords.
 
 * Mon Jul 18 2005 Charlie Brady <charlieb@e-smith.com>
@@ -2408,8 +2420,6 @@ of template sources of unknown size in sequence.
 %prep
 %setup
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %pre
 # Remove legacy symlink if one exists

@@ -1,0 +1,232 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/etc/e-smith/tests/10e-smith-lib/configuration.conf:1.9 e-smith-lib/root/etc/e-smith/tests/10e-smith-lib/configuration.conf:1.10
+--- e-smith-lib/root/etc/e-smith/tests/10e-smith-lib/configuration.conf:1.9	Wed May 28 17:36:04 2003
++++ e-smith-lib/root/etc/e-smith/tests/10e-smith-lib/configuration.conf	Wed Jul 27 17:23:56 2005
+@@ -36,7 +36,7 @@
+ LocalNetmask=255.255.255.0
+ MinUid=5000
+ PasswordSet=yes
+-PreviousConfiguration=/home/e-smith/configuration.previous
++PreviousConfiguration=/home/e-smith/db/configuration.previous
+ SMTPSmartHost=
+ SambaDomainMaster=no
+ SambaServerName=pretz
+Index: e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB.pm
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB.pm:1.39 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB.pm:1.40
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB.pm:1.39	Thu May  5 09:55:42 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB.pm	Wed Jul 27 17:23:57 2005
+@@ -16,7 +16,7 @@
+ use constant TRUE  => 1;
+ use constant FALSE => 0;
+ 
+-our $VERSION = sprintf '%d.%03d', q$Revision: 1.38 $ =~ /: (\d+).(\d+)/;
++our $VERSION = sprintf '%d.%03d', q$Revision: 1.39 $ =~ /: (\d+).(\d+)/;
+ our $Error = undef;
+ 
+ local *LOG;
+@@ -453,7 +453,7 @@
+         {
+             processTemplate(
+                 {
+-                    MORE_DATA             => { 'DB_FILENAME' => $self->{file} },
++                    MORE_DATA             => { 'DB_FILENAME' => $dbfile },
+                     TEMPLATE_PATH         => '',
+                     OUTPUT_TYPE           => 'string',
+                     TEMPLATE_EXPAND_QUEUE =>
+Index: e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm:1.33 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm:1.34
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm:1.33	Fri Jul 15 17:32:12 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm	Wed Jul 27 17:23:57 2005
+@@ -12,7 +12,7 @@
+ use Sys::Syslog qw(:DEFAULT setlogsock);
+ use Fcntl qw(:DEFAULT :flock);
+ 
+-my $Default_Config = '/home/e-smith/configuration';
++my $Default_Config = '/home/e-smith/db/configuration';
+ 
+ =pod
+ 
+@@ -70,7 +70,7 @@
+ deletes are immediately written back to the $config_file.
+ 
+ If no $config_file is supplied it falls back to the environment variable 
+-ESMITH_CONFIG_DB, and finally defaults to F</home/e-smith/configuration>
++ESMITH_CONFIG_DB, and finally defaults to F</home/e-smith/db/configuration>
+ 
+ If the $config_file doesn't exist it will create one for you.
+ 
+@@ -360,7 +360,7 @@
+ 
+ #------------------------------------------------------------
+ # Constructor for the tied hash. If filename not specified,
+-# defaults to '/home/e-smith/configuration'.
++# defaults to '/home/e-smith/db/configuration'.
+ #------------------------------------------------------------
+ 
+ sub TIEHASH
+Index: e-smith-lib/root/usr/lib/perl5/site_perl/esmith/db.pm
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/db.pm:1.15 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/db.pm:1.16
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/db.pm:1.15	Tue Jul 19 13:13:46 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/db.pm	Wed Jul 27 17:23:57 2005
+@@ -69,7 +69,7 @@
+ =cut
+ 
+ use vars qw($VERSION @ISA @EXPORT);
+-$VERSION     = sprintf "%d.%03d", q$Revision: 1.14 $ =~ /(\d+)\.(\d+)/;
++$VERSION     = sprintf "%d.%03d", q$Revision: 1.15 $ =~ /(\d+)\.(\d+)/;
+ 
+ use Exporter;
+ @ISA         = qw(Exporter);
+@@ -701,9 +701,24 @@
+ 
+ sub _db_path($)
+ {
+-    my ($arg) = @_;
++    my ($file) = @_;
+ 
+-    return ($arg =~ m:^/:) ? $arg : "/home/e-smith/${arg}";
++    if ($file =~ m:^/:)
++    {
++	warn "Pathname passed to _db_path($file)";
++	return $file;
++    }
++    return "/home/e-smith/db/$file" if (-e "/home/e-smith/db/$file");
++
++    if (-e "/home/e-smith/$file")
++    {
++	warn "Database found in old location /home/e-smith/$file";
++	return "/home/e-smith/$file";
++    }
++    else
++    {
++	return "/home/e-smith/db/$file";
++    }
+ }
+ 
+ =back
+Index: e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.62 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.63
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.62	Tue Jul 26 16:58:08 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm	Wed Jul 27 17:23:57 2005
+@@ -1272,17 +1272,37 @@
+     # Optionally take an argument to the db root, for testing purposes.
+     my %defaults = (
+         dbroot => '/etc/e-smith/db',
+-        dbhome => '/home/e-smith'
++        dbhome => '/home/e-smith/db',
++        old_dbhome => '/home/e-smith',
+     );
+     my %args   = ( %defaults, @_ );
+     my $dbroot = $args{dbroot};
+     my $dbhome = $args{dbhome};
++    my $old_dbhome = $args{old_dbhome};
++
+     local *DH;
+     opendir DH, $dbroot
+       or die "Could not open $dbroot: $!";
+ 
+     my @dirs = readdir(DH);
+ 
++    # Move all databases to new home first them migrate data
++    foreach my $file ( grep !/^\./, @dirs )
++    {
++        if (-f "${old_dbhome}/$file")
++        {
++            if (-s "${dbhome}/$file")
++            {
++                warn "${old_dbhome}/$file and ${dbhome}/$file exist\n";
++            }
++            else
++            {
++                warn "Rename ${old_dbhome}/$file => ${dbhome}/$file\n";
++                rename "${old_dbhome}/$file", "${dbhome}/$file";
++            }
++        }
++    }
++
+     foreach my $file ( grep !/^\./, @dirs )
+     {
+         # Untaint the result of readdir. As we're expecting filenames like
+@@ -1299,7 +1319,7 @@
+ 
+         eval
+         {
+-            my $h = esmith::ConfigDB->open("$dbhome/$file");
++            my $h = esmith::ConfigDB->open($file);
+             if ($h)
+             {
+                 warn "Migrating existing database $file\n";
+@@ -1317,7 +1337,7 @@
+                 warn "Creating database $file and setting defaults\n";
+ 
+                 # create() and load defaults
+-                unless ( $h = esmith::ConfigDB->create("$dbhome/$file") )
++                unless ( $h = esmith::ConfigDB->create($file) )
+                 {
+                     warn "Could not create $file db: " . esmith::DB->error;
+                 }
+Index: e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm:1.27 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm:1.28
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm:1.27	Wed Jul 27 16:27:01 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/DB/db.pm	Wed Jul 27 17:23:57 2005
+@@ -10,7 +10,7 @@
+ use warnings;
+ use Carp;
+ 
+-our $VERSION = sprintf '%d.%03d', q$Revision: 1.26 $ =~ /: (\d+).(\d+)/;
++our $VERSION = sprintf '%d.%03d', q$Revision: 1.27 $ =~ /: (\d+).(\d+)/;
+ 
+ use esmith::db;
+ use esmith::config;
+@@ -78,6 +78,7 @@
+ sub create
+ {
+     my ( $class, $file ) = @_;
++    $file = $class->_file_path($file);
+     my $self;
+ 
+     eval {
+@@ -131,6 +132,7 @@
+ sub open
+ {
+     my ( $class, $file ) = @_;
++    $file = $class->_file_path($file);
+     my $self = $class->_init($file);
+ 
+     if ( -e $file && !-w $file )
+@@ -155,6 +157,7 @@
+ sub open_ro
+ {
+     my ( $class, $file ) = @_;
++    $file = $class->_file_path($file);
+     my $self = $class->_init($file);
+ 
+     $self->{ro} = 1;
+@@ -208,6 +211,27 @@
+     my $self = bless { file => $file }, $class;
+ 
+     return $self;
++}
++
++sub _file_path
++{
++    my ( $class, $file ) = @_;
++
++    if ($file =~ m:/:)
++    {
++	warn "Pathname passed to _file_path($file)";
++	return $file;
++    }
++
++    if (-e "/home/e-smith/db/$file")
++    {
++	return "/home/e-smith/db/$file";
++    } elsif (-e "/home/e-smith/$file") {
++	warn "Database found in old location /home/e-smith/$file";
++	return "/home/e-smith/$file";
++    } else {
++	return "/home/e-smith/db/$file";
++    }
+ }
+ 
+ =item B<as_hash>
