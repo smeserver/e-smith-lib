@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 02
+%define release 03
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -10,6 +10,7 @@ Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.15.3-02.mitel_patch
+Patch1: e-smith-lib-1.15.3-03.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -32,6 +33,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Tue Aug 16 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-03]
+- Fix POD error in util.pm.
+
 * Wed Jul 27 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.3-02]
 - Move databases default location from /home/e-smith to /home/e-smith/db.
@@ -1479,7 +1484,7 @@ Split of Tai64n package from main e-smith-lib
 
 * Fri Feb 15 2002 Kirrily Robert <skud@e-smith.com>
 - [1.9.1-02]
-- removed unnecessary rmdir from prep section of specfile
+- removed unnecessary rmdir from %prep section of specfile
 
 * Fri Feb 15 2002 Kirrily Robert <skud@e-smith.com>
 - [1.9.1-01]
@@ -2420,6 +2425,7 @@ of template sources of unknown size in sequence.
 %prep
 %setup
 %patch0 -p1
+%patch1 -p1
 
 %pre
 # Remove legacy symlink if one exists
