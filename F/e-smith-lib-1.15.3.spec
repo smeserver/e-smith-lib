@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 03
+%define release 04
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -11,6 +11,7 @@ Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.15.3-02.mitel_patch
 Patch1: e-smith-lib-1.15.3-03.mitel_patch
+Patch2: e-smith-lib-1.15.3-04.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -33,6 +34,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Wed Aug 17 2005 Mark Knox <markk@e-smith.com>
+- [1.15.3-04]
+- Added open_local and open_ro_local methods for clustering [markk MN00094831]
+
 * Tue Aug 16 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.3-03]
 - Fix POD error in util.pm.
@@ -2426,6 +2431,7 @@ of template sources of unknown size in sequence.
 %setup
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %pre
 # Remove legacy symlink if one exists
