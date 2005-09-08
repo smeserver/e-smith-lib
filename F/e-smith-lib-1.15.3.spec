@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 04
+%define release 05
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -12,6 +12,7 @@ Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.15.3-02.mitel_patch
 Patch1: e-smith-lib-1.15.3-03.mitel_patch
 Patch2: e-smith-lib-1.15.3-04.mitel_patch
+Patch3: e-smith-lib-1.15.3-05.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -34,6 +35,11 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Wed Sep  7 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-05]
+- Fix operation of expandTemplate when taint check is enabled.
+  [SF: 1284301]
+
 * Wed Aug 17 2005 Mark Knox <markk@e-smith.com>
 - [1.15.3-04]
 - Added open_local and open_ro_local methods for clustering [markk MN00094831]
@@ -2432,6 +2438,7 @@ of template sources of unknown size in sequence.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %pre
 # Remove legacy symlink if one exists
