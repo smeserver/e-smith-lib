@@ -1,0 +1,21 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/db.pm:1.16 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/db.pm:1.17
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/db.pm:1.16	Wed Jul 27 17:23:57 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/db.pm	Mon Sep 12 11:19:51 2005
+@@ -69,7 +69,7 @@
+ =cut
+ 
+ use vars qw($VERSION @ISA @EXPORT);
+-$VERSION     = sprintf "%d.%03d", q$Revision: 1.15 $ =~ /(\d+)\.(\d+)/;
++$VERSION     = sprintf "%d.%03d", q$Revision: 1.16 $ =~ /(\d+)\.(\d+)/;
+ 
+ use Exporter;
+ @ISA         = qw(Exporter);
+@@ -705,7 +705,6 @@
+ 
+     if ($file =~ m:^/:)
+     {
+-	warn "Pathname passed to _db_path($file)";
+ 	return $file;
+     }
+     return "/home/e-smith/db/$file" if (-e "/home/e-smith/db/$file");

@@ -1,0 +1,17 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.64 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.65
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.64	Tue Aug 16 10:56:42 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm	Fri Sep  9 16:41:04 2005
+@@ -1291,7 +1291,11 @@
+     {
+         if (-f "${old_dbhome}/$file")
+         {
+-            if (-s "${dbhome}/$file")
++            if (-l "${old_dbhome}/$file")
++            {
++                warn "symlink called ${old_dbhome}/$file exists\n";
++            }
++            elsif (-s "${dbhome}/$file")
+             {
+                 warn "${old_dbhome}/$file and ${dbhome}/$file exist\n";
+             }

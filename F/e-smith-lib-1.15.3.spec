@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 05
+%define release 08
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -13,6 +13,9 @@ Patch0: e-smith-lib-1.15.3-02.mitel_patch
 Patch1: e-smith-lib-1.15.3-03.mitel_patch
 Patch2: e-smith-lib-1.15.3-04.mitel_patch
 Patch3: e-smith-lib-1.15.3-05.mitel_patch
+Patch4: e-smith-lib-1.15.3-06.mitel_patch
+Patch5: e-smith-lib-1.15.3-07.mitel_patch
+Patch6: e-smith-lib-1.15.3-08.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -35,6 +38,19 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Mon Sep 12 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-08]
+- Remove warning about explicit path in esmith::db::_db_path.
+  [SF: 1286294]
+
+* Fri Sep  9 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-07]
+- Tolerate, but warn about, symlinks in /home/e-smith. [SF: 1216546]
+
+* Fri Sep  9 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-06]
+- Reduce the noise from _file_path() in esmith::DB::db. [SF: 1286294]
+
 * Wed Sep  7 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.3-05]
 - Fix operation of expandTemplate when taint check is enabled.
@@ -2439,6 +2455,9 @@ of template sources of unknown size in sequence.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %pre
 # Remove legacy symlink if one exists
