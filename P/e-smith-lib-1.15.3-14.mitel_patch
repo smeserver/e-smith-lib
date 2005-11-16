@@ -1,0 +1,13 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/I18N.pm:1.14 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/I18N.pm:1.15
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/I18N.pm:1.14	Fri Jun 25 12:28:45 2004
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/I18N.pm	Wed Oct 26 12:05:07 2005
+@@ -209,6 +209,8 @@
+ 	    $locale = "en_US" if ($opt =~ /^en(-.*)?/);
+ 	    $locale = "es_ES" if ($opt =~ /^es(-.*)?/);
+ 	    $locale = "fr_CA" if ($opt =~ /^fr(-.*)?/);
++	    $locale = "de_DE" if ($opt =~ /^de(-.*)?/);
++	    $locale = "it_IT" if ($opt =~ /^it(-.*)?/);
+ 	}
+     }
+     else 

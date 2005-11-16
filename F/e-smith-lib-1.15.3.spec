@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 08
+%define release 15
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -16,6 +16,12 @@ Patch3: e-smith-lib-1.15.3-05.mitel_patch
 Patch4: e-smith-lib-1.15.3-06.mitel_patch
 Patch5: e-smith-lib-1.15.3-07.mitel_patch
 Patch6: e-smith-lib-1.15.3-08.mitel_patch
+Patch7: e-smith-lib-1.15.3-09.mitel_patch
+Patch8: e-smith-lib-1.15.3-10.mitel_patch
+Patch9: e-smith-lib-1.15.3-11.mitel_patch
+Patch10: e-smith-lib-1.15.3-12.mitel_patch
+Patch11: e-smith-lib-1.15.3-13.mitel_patch
+Patch12: e-smith-lib-1.15.3-14.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -38,6 +44,39 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Thu Oct 27 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-15]
+- Fix a few minor spec file portability issues. [SF: 1339729]
+
+* Wed Oct 26 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-14]
+- Add it and de to the langtag2locale fixups. [SF: 1338236]
+
+* Tue Oct 11 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-13]
+- Build driver list from .ko files as well as .o files. Untaint driver
+  names while building list. [SF: 1323270]
+
+* Mon Sep 26 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-12]
+- Fix "defaults" handling so that values which evaluate to false are
+  not overridden by default. [SF: 1303885]
+
+* Fri Sep 23 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-11]
+- Untaint db names before attempting to move them. [MN00098405]
+
+* Thu Sep 22 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-10]
+- Provide networks method in esmith::NetworksDB. [SF: 1296099]
+- Support a "localhost" configuration in esmith::tcpsvd:configure_peers
+  [SF: 1294719]
+
+* Tue Sep 20 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-09]
+- Remove deprecated functions from esmith::utils. [SF: 1295851]
+- Include only "network" records in local_access_spec. [SF: 1296099]
+
 * Mon Sep 12 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.3-08]
 - Remove warning about explicit path in esmith::db::_db_path.
@@ -1511,7 +1550,7 @@ Split of Tai64n package from main e-smith-lib
 
 * Fri Feb 15 2002 Kirrily Robert <skud@e-smith.com>
 - [1.9.1-02]
-- removed unnecessary rmdir from %prep section of specfile
+- removed unnecessary rmdir from prep section of specfile
 
 * Fri Feb 15 2002 Kirrily Robert <skud@e-smith.com>
 - [1.9.1-01]
@@ -2458,6 +2497,12 @@ of template sources of unknown size in sequence.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
 
 %pre
 # Remove legacy symlink if one exists
@@ -2522,5 +2567,3 @@ rm -rf $RPM_BUILD_ROOT
 %files Tai64n
 %defattr(-,root,root)
 %attr(0755,root,root) /usr/lib/perl5/site_perl/esmith/Tai64n.pm
-%endif
-

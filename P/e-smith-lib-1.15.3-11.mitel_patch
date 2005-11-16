@@ -1,0 +1,14 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.66 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.67
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm:1.66	Tue Sep 20 10:25:24 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/util.pm	Fri Sep 23 17:15:17 2005
+@@ -1173,7 +1173,8 @@
+     my @dirs = readdir(DH);
+ 
+     # Move all databases to new home first them migrate data
+-    foreach my $file ( grep !/^\./, @dirs )
++    # Untaint db names while we are at it.
++    foreach my $file ( map { /(.+)/ ; $1 } grep !/^\./, @dirs )
+     {
+         if (-f "${old_dbhome}/$file")
+         {

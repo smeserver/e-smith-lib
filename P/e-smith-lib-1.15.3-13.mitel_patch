@@ -1,0 +1,25 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm:1.16 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm:1.17
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm:1.16	Sun Jun 12 21:37:25 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/ethernet.pm	Tue Oct 11 14:28:57 2005
+@@ -1,5 +1,5 @@
+ #----------------------------------------------------------------------
+-# Copyright 1999-2003 Mitel Networks Corporation
++# Copyright 1999-2005 Mitel Networks Corporation
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ #----------------------------------------------------------------------
+@@ -75,10 +75,10 @@
+                 }
+                 else
+                 {
+-                    if ($entry =~ /\.o$/)
++                    if ($entry =~ /\.k?o$/)
+                     {
+-                        $entry =~ s/\.o$//;
+-                        $modules_hash{$entry} = 1;
++                        $entry =~ s/(.+)\.k?o$//;
++                        $modules_hash{$1} = 1;
+                     }
+                 }
+             }
