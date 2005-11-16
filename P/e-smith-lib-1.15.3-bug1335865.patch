@@ -1,0 +1,28 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm
+--- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm	2005-11-16 12:20:21.155867575 +1100
++++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm	2005-11-16 12:19:20.370556233 +1100
+@@ -11,6 +11,7 @@
+ 
+ use Sys::Syslog qw(:DEFAULT setlogsock);
+ use Fcntl qw(:DEFAULT :flock);
++use Carp qw(cluck);
+ 
+ my $Default_Config = '/home/e-smith/db/configuration';
+ 
+@@ -368,6 +369,16 @@
+     my $class    = shift;
+     my $filename = shift || $ENV{ESMITH_CONFIG_DB} || $Default_Config;
+ 
++    if ($filename =~ m:^/home/e-smith/\w+$: )
++    {
++        cluck "*WARNING* esmith::config($filename) called with old \n" .
++              "database path. Direct use of esmith::config has been\n" .
++	      "deprecated since release 5.5\n" .
++              "The following package needs to be updated:\n";
++
++        $filename =~ s:e-smith:e-smith/db:;
++    }
++
+     my $self =
+         {
+             FILENAME => $filename,

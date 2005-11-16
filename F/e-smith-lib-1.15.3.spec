@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 15
+%define release 15sme01
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -22,6 +22,7 @@ Patch9: e-smith-lib-1.15.3-11.mitel_patch
 Patch10: e-smith-lib-1.15.3-12.mitel_patch
 Patch11: e-smith-lib-1.15.3-13.mitel_patch
 Patch12: e-smith-lib-1.15.3-14.mitel_patch
+Patch100:  e-smith-lib-1.15.3-bug1335865.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -44,6 +45,11 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Wed Nov 16 2005 Gordon Rowell <gordonr@gormand.com.au>
+- [1.15.3-15sme01]
+- Redirect esmith::config calls on old db paths to the new 
+  location [SF: 1335865]
+
 * Thu Oct 27 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.3-15]
 - Fix a few minor spec file portability issues. [SF: 1339729]
@@ -2503,6 +2509,7 @@ of template sources of unknown size in sequence.
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch100 -p1
 
 %pre
 # Remove legacy symlink if one exists
