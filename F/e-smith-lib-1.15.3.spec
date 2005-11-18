@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 21
+%define release 21sme01
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -28,6 +28,7 @@ Patch15: e-smith-lib-1.15.3-18.mitel_patch
 Patch16: e-smith-lib-1.15.3-19.mitel_patch
 Patch17: e-smith-lib-1.15.3-20.mitel_patch
 Patch18: e-smith-lib-1.15.3-21.mitel_patch
+Patch100: e-smith-lib-1.15.3-adjust.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -50,6 +51,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Sat Nov 19 2005 Gordon Rowell <gordonr@gormand.com.au>
+- [1.15.3-21sme01]
+- Correct adjust-services logic for disabled services [SF: 1357629]
+
 * Wed Nov 16 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.3-21]
 - Allow services2adjust directories to contain files rather than just dangling
@@ -2544,6 +2549,7 @@ of template sources of unknown size in sequence.
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
+%patch100 -p1
 
 %pre
 # Remove legacy symlink if one exists
