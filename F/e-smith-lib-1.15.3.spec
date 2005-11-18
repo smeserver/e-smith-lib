@@ -53,7 +53,7 @@ Split of Tai64n package from main e-smith-lib
 %changelog
 * Sat Nov 19 2005 Gordon Rowell <gordonr@gormand.com.au>
 - [1.15.3-21sme01]
-- Correct adjust-services logic for disabled services [SF: 1357629]
+- Correct adjust-services logic for stopped services [SF: 1357629]
 
 * Wed Nov 16 2005 Charlie Brady <charlieb@e-smith.com>
 - [1.15.3-21]
