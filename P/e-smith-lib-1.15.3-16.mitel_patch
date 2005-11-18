@@ -1,6 +1,7 @@
-diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm
---- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm	2005-11-16 12:20:21.155867575 +1100
-+++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm	2005-11-16 12:19:20.370556233 +1100
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm:1.34 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm:1.35
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm:1.34	Wed Jul 27 17:23:57 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/config.pm	Tue Nov 15 20:37:17 2005
 @@ -11,6 +11,7 @@
  
  use Sys::Syslog qw(:DEFAULT setlogsock);
@@ -9,10 +10,11 @@ diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl
  
  my $Default_Config = '/home/e-smith/db/configuration';
  
-@@ -368,6 +369,16 @@
+@@ -367,6 +368,16 @@
+ {
      my $class    = shift;
      my $filename = shift || $ENV{ESMITH_CONFIG_DB} || $Default_Config;
- 
++
 +    if ($filename =~ m:^/home/e-smith/\w+$: )
 +    {
 +        cluck "*WARNING* esmith::config($filename) called with old \n" .
@@ -22,7 +24,6 @@ diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl
 +
 +        $filename =~ s:e-smith:e-smith/db:;
 +    }
-+
+ 
      my $self =
          {
-             FILENAME => $filename,

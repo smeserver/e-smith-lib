@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 15sme01
+%define release 21
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -22,7 +22,12 @@ Patch9: e-smith-lib-1.15.3-11.mitel_patch
 Patch10: e-smith-lib-1.15.3-12.mitel_patch
 Patch11: e-smith-lib-1.15.3-13.mitel_patch
 Patch12: e-smith-lib-1.15.3-14.mitel_patch
-Patch100:  e-smith-lib-1.15.3-bug1335865.patch
+Patch13: e-smith-lib-1.15.3-16.mitel_patch
+Patch14: e-smith-lib-1.15.3-17.mitel_patch
+Patch15: e-smith-lib-1.15.3-18.mitel_patch
+Patch16: e-smith-lib-1.15.3-19.mitel_patch
+Patch17: e-smith-lib-1.15.3-20.mitel_patch
+Patch18: e-smith-lib-1.15.3-21.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -45,9 +50,33 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
-* Wed Nov 16 2005 Gordon Rowell <gordonr@gormand.com.au>
-- [1.15.3-15sme01]
-- Redirect esmith::config calls on old db paths to the new 
+* Wed Nov 16 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-21]
+- Allow services2adjust directories to contain files rather than just dangling
+  symlinks. Files can contain more than one actions to perform. [SF: 1270644]
+
+* Wed Nov 16 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-20]
+- Also don't start services if we just want to "once" them. [SF: 1357629]
+
+* Wed Nov 16 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-19]
+- Fix restart of enabled supervised services which we are attempting to stop.
+  [SF: 1357629]
+
+* Tue Nov 15 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-18]
+- Set default for $type in esmith::cgi::genSmallCell, to prevent some log
+  noise. [SF: 1357830]
+
+* Tue Nov 15 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-17]
+- Pass $EVENT to template expansions in generic_template_expand.
+  [SF: MN00106104]
+
+* Tue Nov 15 2005 Gordon Rowell <gordonr@e-smith.com>
+- [1.15.3-16]
+- Redirect esmith::config calls on old db paths to the new
   location [SF: 1335865]
 
 * Thu Oct 27 2005 Charlie Brady <charlieb@e-smith.com>
@@ -2509,7 +2538,12 @@ of template sources of unknown size in sequence.
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch100 -p1
+%patch13 -p1
+%patch14 -p1
+%patch15 -p1
+%patch16 -p1
+%patch17 -p1
+%patch18 -p1
 
 %pre
 # Remove legacy symlink if one exists

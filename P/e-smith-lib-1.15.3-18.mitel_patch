@@ -1,0 +1,12 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/cgi.pm:1.15 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/cgi.pm:1.16
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/cgi.pm:1.15	Wed Feb 23 15:43:46 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/cgi.pm	Wed Nov 16 00:22:18 2005
+@@ -289,6 +289,7 @@
+ sub genSmallCell
+ {
+     my ($q, $text, $type, $colspan) = @_;
++    $type ||= 'normal';
+     $colspan ||= 1;
+     if ($text =~ /^\s*$/){ $text = "&nbsp;" }
+     if ("$type" eq "header") {
