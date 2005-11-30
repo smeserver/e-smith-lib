@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 24
+%define release 25
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -53,6 +53,9 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Wed Nov 30 2005 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-25
+- Bump release number only
+
 * Thu Nov 24 2005 Gordon Rowell <gordonr@e-smith.com>
 - [1.15.3-24]
 - Add missing 'use Locale::gettext' to esmith::console.pm [MN00108804]
