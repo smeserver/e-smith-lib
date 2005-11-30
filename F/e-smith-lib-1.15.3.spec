@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 21sme01
+%define release 24
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -28,7 +28,9 @@ Patch15: e-smith-lib-1.15.3-18.mitel_patch
 Patch16: e-smith-lib-1.15.3-19.mitel_patch
 Patch17: e-smith-lib-1.15.3-20.mitel_patch
 Patch18: e-smith-lib-1.15.3-21.mitel_patch
-Patch100: e-smith-lib-1.15.3-adjust.patch
+Patch19: e-smith-lib-1.15.3-22.mitel_patch
+Patch20: e-smith-lib-1.15.3-23.mitel_patch
+Patch21: e-smith-lib-1.15.3-24.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -51,8 +53,16 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
-* Sat Nov 19 2005 Gordon Rowell <gordonr@gormand.com.au>
-- [1.15.3-21sme01]
+* Thu Nov 24 2005 Gordon Rowell <gordonr@e-smith.com>
+- [1.15.3-24]
+- Add missing 'use Locale::gettext' to esmith::console.pm [MN00108804]
+
+* Sun Nov 20 2005 Charlie Brady <charlieb@e-smith.com>
+- [1.15.3-23]
+- Clarify logic for stopped services in adjust-services. [SF: 1357629]
+
+* Sun Nov 20 2005 Gordon Rowell <gordonr@e-smith.com>
+- [1.15.3-22]
 - Correct adjust-services logic for stopped services [SF: 1357629]
 
 * Wed Nov 16 2005 Charlie Brady <charlieb@e-smith.com>
@@ -2549,7 +2559,9 @@ of template sources of unknown size in sequence.
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
-%patch100 -p1
+%patch19 -p1
+%patch20 -p1
+%patch21 -p1
 
 %pre
 # Remove legacy symlink if one exists

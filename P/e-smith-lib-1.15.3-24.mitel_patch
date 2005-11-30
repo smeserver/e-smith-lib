@@ -1,0 +1,19 @@
+Index: e-smith-lib/e-smith-lib.spec
+diff -u e-smith-lib/root/usr/lib/perl5/site_perl/esmith/console.pm:1.5 e-smith-lib/root/usr/lib/perl5/site_perl/esmith/console.pm:1.6
+--- e-smith-lib/root/usr/lib/perl5/site_perl/esmith/console.pm:1.5	Wed Feb 16 12:17:11 2005
++++ e-smith-lib/root/usr/lib/perl5/site_perl/esmith/console.pm	Thu Nov 24 20:47:18 2005
+@@ -1,5 +1,5 @@
+ #----------------------------------------------------------------------
+-# Copyright 1999-2004 Mitel Networks Corporation
++# Copyright 1999-2005 Mitel Networks Corporation
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ #----------------------------------------------------------------------
+@@ -36,6 +36,7 @@
+ use strict;
+ use vars qw($VERSION @ISA @EXPORT_OK);
+ use esmith::util;
++use Locale::gettext;
+ 
+ @ISA = qw(Exporter);
+ 
