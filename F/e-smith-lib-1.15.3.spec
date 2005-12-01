@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 25
+%define release 26
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -31,6 +31,7 @@ Patch18: e-smith-lib-1.15.3-21.mitel_patch
 Patch19: e-smith-lib-1.15.3-22.mitel_patch
 Patch20: e-smith-lib-1.15.3-23.mitel_patch
 Patch21: e-smith-lib-1.15.3-24.mitel_patch
+Patch22: e-smith-lib-1.15.3-26.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -53,6 +54,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Thu Dec 01 2005 Mark Knox <mark_knox@mitel.com>
+- [1.15.3-26]
+- Added event queueing (open source portion) for clustered systems [BZ250]
+
 * Wed Nov 30 2005 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-25
 - Bump release number only
 
@@ -2565,6 +2570,7 @@ of template sources of unknown size in sequence.
 %patch19 -p1
 %patch20 -p1
 %patch21 -p1
+%patch22 -p1
 
 %pre
 # Remove legacy symlink if one exists
