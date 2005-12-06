@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 26
+%define release 27
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -32,6 +32,7 @@ Patch19: e-smith-lib-1.15.3-22.mitel_patch
 Patch20: e-smith-lib-1.15.3-23.mitel_patch
 Patch21: e-smith-lib-1.15.3-24.mitel_patch
 Patch22: e-smith-lib-1.15.3-26.mitel_patch
+Patch23: e-smith-lib-1.15.3-27.mitel_patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -54,6 +55,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Mon Dec 05 2005 Mark Knox <mark_knox@mitel.com>
+- [1.15.3-27]
+- Moved queueing logic to separate daemon, replaced with FIFO IPC [BZ252
+
 * Thu Dec 01 2005 Mark Knox <mark_knox@mitel.com>
 - [1.15.3-26]
 - Added event queueing (open source portion) for clustered systems [BZ250]
@@ -2571,6 +2576,7 @@ of template sources of unknown size in sequence.
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
+#%patch23 -p1
 
 %pre
 # Remove legacy symlink if one exists

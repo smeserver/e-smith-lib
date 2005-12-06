@@ -1,0 +1,65 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/event.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/event.pm
+--- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/event.pm	2005-12-06 11:36:33.406479000 -0500
++++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/event.pm	2005-12-06 11:35:34.425293000 -0500
+@@ -13,6 +13,7 @@
+ use File::Basename;
+ use File::Temp qw/ :mktemp /;
+ use esmith::ConfigDB;
++use POSIX;
+ 
+ =pod
+ 
+@@ -123,35 +124,24 @@
+         print LOG $log;
+     }
+ 
+-    # Implement event queuing for clustered systems. If the EventQ dir
+-    # exists, it should be populated with subdirs named after the IP of
+-    # each memeber node. Event files queued here are processed by the 
+-    # Mitel replication handler and removed.
+-    my $qdir = "/home/e-smith/EventQ";
+-    if(-d $qdir)
+-    {
+-        # Ensure we aren't called by a cascaded event. We only need to
+-        # queue the top-level of such a beast.
+-        my $ppid = getppid();
+-        open F, "/proc/$ppid/cmdline";
+-        my $cmd = <F>;
+-        close F;
+-        unless($cmd =~ "/etc/e-smith/event")
+-        {
+-            my $confdb = esmith::ConfigDB->open_ro;
+-            my $addr = $confdb->get('LocalIP')->value;
+-            print LOG "Queuing event $event for replication";
+-            opendir DIR, $qdir;
+-            my @dirs = grep(!/^\./, readdir(DIR));
+-            closedir DIR;
+-            foreach my $dir (@dirs)
+-            {
+-                next if $dir eq $addr;
+-                my ($fh, $fname) = mkstemp("$qdir/$dir/evtXXXXXX");
+-                print $fh join(" ", $event, @args);
+-                close $fh;
+-            }
+-        }
++    # Implement event queuing for clustered systems. 
++    my $qfifo = "/var/spool/eventq";
++    return $exitcode unless (-e $qfifo);
++
++    # Ensure we aren't called by a cascaded event. We only need to
++    # queue the top-level of such a beast.
++    my $ppid = getppid();
++    open F, "/proc/$ppid/cmdline";
++    my $cmd = <F>;
++    close F;
++
++    unless($cmd =~ "/etc/e-smith/event")
++    {
++        my $fd = POSIX::open($qfifo, &POSIX::O_WRONLY) or return $exitcode;
++        my $argstr = join(" ",$event,@args);
++        $argstr .= "\n";
++        POSIX::write($fd, $argstr, length($argstr));
++        POSIX::close($fd);
+     }
+ 
+     return $exitcode;

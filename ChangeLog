@@ -136,3 +136,8 @@ Thu Dec  1 11:34:38 2005                            Mark Knox (knoxma)
 
 Added queueing of events for clustered environment.
 ----------------------------------------------------------------------
+Tue Dec  6 11:37:35 2005                            Mark Knox (knoxma)
+
+Refactored to remove queueing code, moved to separate module. We now
+write to a FIFO if one exists.
+----------------------------------------------------------------------
