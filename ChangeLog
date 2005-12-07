@@ -141,3 +141,7 @@ Tue Dec  6 11:37:35 2005                            Mark Knox (knoxma)
 Refactored to remove queueing code, moved to separate module. We now
 write to a FIFO if one exists.
 ----------------------------------------------------------------------
+Wed Dec  7 09:59:13 2005                            Mark Knox (knoxma)
+
+Uncommented a patch line that was missed previously. Whoops.
+----------------------------------------------------------------------

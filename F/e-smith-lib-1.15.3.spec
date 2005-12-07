@@ -2576,7 +2576,7 @@ of template sources of unknown size in sequence.
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
-#%patch23 -p1
+%patch23 -p1
 
 %pre
 # Remove legacy symlink if one exists
