@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 28
+%define release 29
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -34,6 +34,7 @@ Patch21: e-smith-lib-1.15.3-24.mitel_patch
 Patch22: e-smith-lib-1.15.3-26.mitel_patch
 Patch23: e-smith-lib-1.15.3-27.mitel_patch
 Patch24: e-smith-lib-1.15.3-RenameDBOnConflict.patch
+Patch25: e-smith-lib-1.15.3-NoNewlineCluck.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -56,6 +57,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Tue Dec 27 2005 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-29
+- Remove newlines from cluck() string and just note that the old
+  path was used [SME: 365]
+
 * Sat Dec 25 2005 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-28
 - If db exists in both the old and new locations in 
   initialize_default_databases, rename the one in the new 
@@ -2585,6 +2590,7 @@ of template sources of unknown size in sequence.
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
+%patch25 -p1
 
 %pre
 # Remove legacy symlink if one exists
