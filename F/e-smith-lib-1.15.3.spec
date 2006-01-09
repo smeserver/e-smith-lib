@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 29
+%define release 30
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -35,6 +35,7 @@ Patch22: e-smith-lib-1.15.3-26.mitel_patch
 Patch23: e-smith-lib-1.15.3-27.mitel_patch
 Patch24: e-smith-lib-1.15.3-RenameDBOnConflict.patch
 Patch25: e-smith-lib-1.15.3-NoNewlineCluck.patch
+Patch26: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -57,6 +58,9 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Mon Jan 9 2006 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-30
+- Allow dot and underscore in account names [SME: 24]
+
 * Tue Dec 27 2005 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-29
 - Remove newlines from cluck() string and just note that the old
   path was used [SME: 365]
@@ -2591,6 +2595,7 @@ of template sources of unknown size in sequence.
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
+%patch26 -p1
 
 %pre
 # Remove legacy symlink if one exists
