@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 30
+%define release 32
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -36,6 +36,8 @@ Patch23: e-smith-lib-1.15.3-27.mitel_patch
 Patch24: e-smith-lib-1.15.3-RenameDBOnConflict.patch
 Patch25: e-smith-lib-1.15.3-NoNewlineCluck.patch
 Patch26: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch
+Patch27: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch2
+Patch28: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch3
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -58,6 +60,14 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Mon Jan 9 2006 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-32
+- Check whether an accounts db record exists before trying to create
+  the dot and underscore pseudonyms (new_record will fail silently)
+  and check that the records are pseudonyms before deleting them [SME: 24]
+
+* Mon Jan 9 2006 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-31
+- And update POD for last change [SME: 24]
+
 * Mon Jan 9 2006 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-30
 - Allow dot and underscore in account names [SME: 24]
 
@@ -2596,6 +2606,8 @@ of template sources of unknown size in sequence.
 %patch24 -p1
 %patch25 -p1
 %patch26 -p1
+%patch27 -p1
+%patch28 -p1
 
 %pre
 # Remove legacy symlink if one exists
