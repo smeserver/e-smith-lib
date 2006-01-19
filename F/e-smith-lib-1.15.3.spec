@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 33
+%define release 34
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -39,6 +39,7 @@ Patch26: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch
 Patch27: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch2
 Patch28: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch3
 Patch29: e-smith-lib-1.15.3-local_access_spec.patch
+Patch30: e-smith-lib-1.15.3-no_kudzu.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -61,6 +62,10 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Thu Jan 19 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-34
+- Remove running of kudzu during NIC probing. TODO: Find a solution
+  to system reconfiguration when new hardware is added. [SME: 192]
+
 * Tue Jan 10 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-33
 - Fold a.b.c.d/255.255.255.255 to a.b.c.d in local_access_spec() to
   work around bugs in applications which don't accept such specs.
@@ -2615,6 +2620,7 @@ of template sources of unknown size in sequence.
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
+%patch30 -p1
 
 %pre
 # Remove legacy symlink if one exists
