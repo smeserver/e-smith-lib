@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 34
+%define release 35
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -40,6 +40,7 @@ Patch27: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch2
 Patch28: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch3
 Patch29: e-smith-lib-1.15.3-local_access_spec.patch
 Patch30: e-smith-lib-1.15.3-no_kudzu.patch
+Patch31: e-smith-lib-1.15.3-Logger_cleanup.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -62,6 +63,9 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Fri Jan 20 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-35
+- Fix up use of Sys::Syslog::syslog. [SME: 526]
+
 * Thu Jan 19 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-34
 - Remove running of kudzu during NIC probing. TODO: Find a solution
   to system reconfiguration when new hardware is added. [SME: 192]
@@ -2621,6 +2625,7 @@ of template sources of unknown size in sequence.
 %patch28 -p1
 %patch29 -p1
 %patch30 -p1
+%patch31 -p1
 
 %pre
 # Remove legacy symlink if one exists

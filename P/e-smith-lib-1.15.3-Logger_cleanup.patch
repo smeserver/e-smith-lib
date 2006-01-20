@@ -1,0 +1,82 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm
+--- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm	2006-01-20 14:33:06.000000000 -0500
++++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/config.pm	2006-01-20 14:33:00.000000000 -0500
+@@ -589,13 +589,9 @@
+     my $msg = shift;
+     my $program = $0;
+ 
+-    # Cook % characters. syslog formats messages using sprintf().
+-
+-    $msg =~ s/%/%%/g;
+-
+     setlogsock 'unix';
+     openlog($program, 'pid', 'local1');
+-    syslog('info', $msg);
++    syslog('info', "%s", $msg);
+     closelog();
+ }
+ 
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/DB.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/DB.pm
+--- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/DB.pm	2006-01-20 14:33:06.000000000 -0500
++++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/DB.pm	2006-01-20 11:57:07.000000000 -0500
+@@ -11,7 +11,6 @@
+ use Carp;
+ use File::Basename;
+ use esmith::templates;
+-use esmith::Logger;
+ 
+ use constant TRUE  => 1;
+ use constant FALSE => 0;
+@@ -19,9 +18,6 @@
+ our $VERSION = sprintf '%d.%03d', q$Revision: 1.40 $ =~ /: (\d+).(\d+)/;
+ our $Error = undef;
+ 
+-local *LOG;
+-tie *LOG, 'esmith::Logger';
+-
+ =head1 NAME
+ 
+ esmith::DB - virtual interface to E-Smith databases
+@@ -689,11 +685,6 @@
+     return $Error;
+ }
+ 
+-END
+-{
+-    close LOG;
+-}
+-
+ =back
+ 
+ =head1 AUTHOR
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/Logger.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/Logger.pm
+--- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/Logger.pm	2004-02-13 10:19:20.000000000 -0500
++++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/Logger.pm	2006-01-20 11:21:12.000000000 -0500
+@@ -39,14 +39,14 @@
+ sub PRINT
+ {
+     my $self = shift;
+-    syslog('info', "@_");
++    syslog('info', "%s", "@_");
+ }
+ 
+ sub PRINTF
+ {
+     my $self = shift;
+     my $fmt = shift;
+-    syslog('info', sprintf($fmt, @_));
++    syslog('info', $fmt, @_);
+ }
+ 
+ sub WRITE
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/util.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/util.pm
+--- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/util.pm	2006-01-20 14:33:06.000000000 -0500
++++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/util.pm	2006-01-20 11:56:49.000000000 -0500
+@@ -17,7 +17,6 @@
+ use esmith::DB;
+ use esmith::ConfigDB;
+ use Net::IPv4Addr qw(:all);
+-use esmith::Logger;
+ 
+ use File::Basename;
+ use File::stat;
