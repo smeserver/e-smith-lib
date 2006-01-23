@@ -1,0 +1,17 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm
+--- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm	2006-01-23 17:18:27.000000000 -0500
++++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm	2006-01-23 17:18:20.000000000 -0500
+@@ -295,11 +295,10 @@
+ 
+ sub remove_all_user_pseudonyms {
+     my ($self, $user) = @_;
+-    my @pseudonyms = $self->pseudonyms();
+     my $count = 0;
+-    foreach my $p_rec (grep { $_->prop("Account") eq $user } @pseudonyms)
++    foreach my $p_rec (grep { $_->prop("Account") eq $user } $self->pseudonyms())
+     {
+-	foreach my $p_p_rec (grep { $_->prop("Account") eq $p_rec->key } @pseudonyms)
++	foreach my $p_p_rec (grep { $_->prop("Account") eq $p_rec->key } $self->pseudonyms())
+ 	{
+ 	    $p_p_rec->delete;
+ 	    $count++;

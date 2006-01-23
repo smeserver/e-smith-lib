@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 35
+%define release 36
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -41,6 +41,7 @@ Patch28: e-smith-lib-1.15.3-DotUnderscoreAccounts.patch3
 Patch29: e-smith-lib-1.15.3-local_access_spec.patch
 Patch30: e-smith-lib-1.15.3-no_kudzu.patch
 Patch31: e-smith-lib-1.15.3-Logger_cleanup.patch
+Patch32: e-smith-lib-1.15.3-pseudonym_delete.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -63,6 +64,9 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Mon Jan 23 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-36
+- Fix warning during pseudonym deletion. [SME: 491]
+
 * Fri Jan 20 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-35
 - Fix up use of Sys::Syslog::syslog. [SME: 526]
 
@@ -2626,6 +2630,7 @@ of template sources of unknown size in sequence.
 %patch29 -p1
 %patch30 -p1
 %patch31 -p1
+%patch32 -p1
 
 %pre
 # Remove legacy symlink if one exists
