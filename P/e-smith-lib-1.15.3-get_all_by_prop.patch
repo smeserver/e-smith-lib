@@ -1,0 +1,41 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/DB.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/DB.pm
+--- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/DB.pm	2006-02-07 05:52:36.310256037 +1100
++++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/DB.pm	2006-02-07 05:52:32.580904902 +1100
+@@ -216,19 +216,27 @@
+ 
+ sub get_all_by_prop
+ {
+-    my ( $self, $prop, $val ) = @_;
++    my ( $self, $prop, @rest ) = @_;
++    my %props;
+ 
+-    if ( $prop =~ /^HASH/ )
++    if ( ref($prop) eq 'HASH' )
+     {
+-        carp "get_all_by_prop called with anonymous hash argument";
+-        ( $prop, $val ) = ( %{$prop} );
++	carp "get_all_by_prop called with anonymous hash argument";
++	%props = ( %{$prop} );
+     }
+-    my @things = sort { $a->key cmp $b->key }
+-      grep
+-    {
+-        defined $_->prop($prop) and $_->prop($prop) =~ /(?:^|,)$val(?:,|$)/
+-    } $self->get_all;
+-    return @things;
++    else
++    {
++	%props = ($prop, @rest);
++    }
++    return sort { $a->key cmp $b->key } grep
++	{
++	    my $found = 1;
++	    while ( my ($p, $v) = each (%props) )
++	    {
++		$found &= ( defined $_->prop($p) and $_->prop($p) =~ /(?:^|,)$v(?:,|$)/ );
++	    }
++	    $found;
++	} $self->get_all;
+ }
+ 
+ =item I<get_value>
