@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 37
+%define release 38
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -43,6 +43,7 @@ Patch30: e-smith-lib-1.15.3-no_kudzu.patch
 Patch31: e-smith-lib-1.15.3-Logger_cleanup.patch
 Patch32: e-smith-lib-1.15.3-pseudonym_delete.patch
 Patch33: e-smith-lib-1.15.3-get_all_by_prop.patch
+Patch34: e-smith-lib-1.15.3-get_all_by_prop.patch2
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -65,6 +66,9 @@ Group: Networking/Daemons
 Split of Tai64n package from main e-smith-lib
 
 %changelog
+* Sat Feb 11 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-37
+- Fix get_all_by_prop in scalar context. [SME: 669,721]
+
 * Mon Feb  6 2006 Shad L. Lords <slords@mail.com> 1.15.3-37
 - Add ability to pass many props to get_all_by_prop [SME: 669]
 
@@ -2636,6 +2640,7 @@ of template sources of unknown size in sequence.
 %patch31 -p1
 %patch32 -p1
 %patch33 -p1
+%patch34 -p1
 
 %pre
 # Remove legacy symlink if one exists
