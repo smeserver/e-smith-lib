@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 38
+%define release 39
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -44,11 +44,13 @@ Patch31: e-smith-lib-1.15.3-Logger_cleanup.patch
 Patch32: e-smith-lib-1.15.3-pseudonym_delete.patch
 Patch33: e-smith-lib-1.15.3-get_all_by_prop.patch
 Patch34: e-smith-lib-1.15.3-get_all_by_prop.patch2
+Patch35: e-smith-lib-1.15.3-noTai64n.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
 BuildRequires: e-smith-test >= 0.1.14
+Obsoletes: %{name}-Tai64n
 Requires: perl, perl(Text::Template)
 Requires: perl(Time::HiRes), perl(MIME::Base64)
 Requires: perl(Authen::PAM), perl(I18N::AcceptLanguage)
@@ -58,14 +60,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 %description
 e-smith server and gateway software - library module.
 
-%package Tai64n
-Summary: SME Server Tai64n library
-Group: Networking/Daemons
-
-%description Tai64n
-Split of Tai64n package from main e-smith-lib
-
 %changelog
+* Sat Feb 11 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-38
+- Remove obsolete e-smith-lib-Tai64n package. [SME: 689]
+
 * Sat Feb 11 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-37
 - Fix get_all_by_prop in scalar context. [SME: 669,721]
 
@@ -2641,6 +2639,7 @@ of template sources of unknown size in sequence.
 %patch32 -p1
 %patch33 -p1
 %patch34 -p1
+%patch35 -p1
 
 %pre
 # Remove legacy symlink if one exists
@@ -2690,7 +2689,6 @@ rm -rf $RPM_BUILD_ROOT
 (cd root   ; find . -depth -print | cpio -dump $RPM_BUILD_ROOT)
 rm -f %{name}-%{version}-%{release}-filelist
 /sbin/e-smith/genfilelist $RPM_BUILD_ROOT \
-    | grep -v '/usr/lib/perl5/site_perl/esmith/Tai64n.pm' \
     >%{name}-%{version}-%{release}-filelist
 echo "%doc Copying" >> %{name}-%{version}-%{release}-filelist
 echo "%doc Artistic" >> %{name}-%{version}-%{release}-filelist
@@ -2701,7 +2699,3 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}-%{version}-%{release}-filelist
 %defattr(-,root,root)
-
-%files Tai64n
-%defattr(-,root,root)
-%attr(0755,root,root) /usr/lib/perl5/site_perl/esmith/Tai64n.pm
