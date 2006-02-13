@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 39
+%define release 40
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -45,6 +45,7 @@ Patch32: e-smith-lib-1.15.3-pseudonym_delete.patch
 Patch33: e-smith-lib-1.15.3-get_all_by_prop.patch
 Patch34: e-smith-lib-1.15.3-get_all_by_prop.patch2
 Patch35: e-smith-lib-1.15.3-noTai64n.patch
+Patch36: e-smith-lib-1.15.3-customURL.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -61,8 +62,15 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
-* Sat Feb 11 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-38
+* Mon Feb 13 2006 Charlie Brady <charlie_brady@mitel.com> 1.15.3-40
+- Update URL in default template-begin fragment. [SME: 773]
+
+* Sat Feb 11 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-39
 - Remove obsolete e-smith-lib-Tai64n package. [SME: 689]
+
+* Sat Feb 11 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-38
+- [Null changelog for missing version - we accidentally skipped
+   this version.]
 
 * Sat Feb 11 2006 Charlie Brady <charlieb@e-smith.com> 1.15.3-37
 - Fix get_all_by_prop in scalar context. [SME: 669,721]
@@ -2640,6 +2648,7 @@ of template sources of unknown size in sequence.
 %patch33 -p1
 %patch34 -p1
 %patch35 -p1
+%patch36 -p1
 
 %pre
 # Remove legacy symlink if one exists
