@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.3
-%define release 40
+%define release 41
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -46,6 +46,7 @@ Patch33: e-smith-lib-1.15.3-get_all_by_prop.patch
 Patch34: e-smith-lib-1.15.3-get_all_by_prop.patch2
 Patch35: e-smith-lib-1.15.3-noTai64n.patch
 Patch36: e-smith-lib-1.15.3-customURL.patch
+Patch37: e-smith-lib-1.15.3-customText.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -62,6 +63,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Tue Feb 14 2006 Gordon Rowell <gordonr@gormand.com.au> 1.15.3-41
+- Reworded text for template-begin and change URL to /development/
+  rather than /custom/ [SME: 773]
+
 * Mon Feb 13 2006 Charlie Brady <charlie_brady@mitel.com> 1.15.3-40
 - Update URL in default template-begin fragment. [SME: 773]
 
@@ -2649,6 +2654,7 @@ of template sources of unknown size in sequence.
 %patch34 -p1
 %patch35 -p1
 %patch36 -p1
+%patch37 -p1
 
 %pre
 # Remove legacy symlink if one exists

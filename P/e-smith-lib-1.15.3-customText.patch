@@ -1,0 +1,20 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/etc/e-smith/templates-default/template-begin mezzanine_patched_e-smith-lib-1.15.3/root/etc/e-smith/templates-default/template-begin
+--- e-smith-lib-1.15.3/root/etc/e-smith/templates-default/template-begin	2006-02-14 12:58:21.691242989 +1100
++++ mezzanine_patched_e-smith-lib-1.15.3/root/etc/e-smith/templates-default/template-begin	2006-02-14 12:57:52.583307442 +1100
+@@ -1,9 +1,10 @@
+ #------------------------------------------------------------
+-# DO NOT MODIFY THIS FILE! It is updated automatically by the
+-# SME Server software. Instead, modify the source template in
+-# an /etc/e-smith/templates-custom directory. For more
+-# information, see http://www.contribs.org/custom/
++#	       !!DO NOT MODIFY THIS FILE!!
++# 
++# Manual changes will be lost when this file is regenerated.
+ #
+-# copyright (C) 1999-2006 Mitel Networks Corporation
++# Please read the developer's guide, which is available
++# at http://www.contribs.org/development/
++#
++# Copyright (C) 1999-2006 Mitel Networks Corporation
+ #------------------------------------------------------------
+-
