@@ -1,0 +1,67 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/console.pm mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/console.pm
+--- e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/console.pm	2006-02-16 15:07:18.384887000 +1100
++++ mezzanine_patched_e-smith-lib-1.15.3/root/usr/lib/perl5/site_perl/esmith/console.pm	2006-02-16 15:06:00.646412621 +1100
+@@ -1,5 +1,5 @@
+ #----------------------------------------------------------------------
+-# Copyright 1999-2005 Mitel Networks Corporation
++# Copyright 1999-2006 Mitel Corporation
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ #----------------------------------------------------------------------
+@@ -37,6 +37,7 @@
+ use vars qw($VERSION @ISA @EXPORT_OK);
+ use esmith::util;
+ use Locale::gettext;
++use esmith::ConfigDB;
+ 
+ @ISA = qw(Exporter);
+ 
+@@ -73,8 +74,6 @@
+     my $self = shift;
+     my @whiptailArgs = @_;
+ 
+-    my $release = esmith::util::determineRelease();
+-
+     # now would be a good time to flush output buffers, so the partial
+     # buffers don't get copied:
+ 
+@@ -115,11 +114,10 @@
+         close WRITER
+             or die gettext("Couldn't close writing end of pipe"), ": $!\n";
+ 
++
+         unshift @whiptailArgs, $whiptail,
+             '--clear',
+-            '--backtitle',
+-            "Mitel Networks server ${release} Copyright 1999-2005 Mitel Networks Corporation";
+-
++            '--backtitle', $self->backtitle;
+         exec @whiptailArgs;
+         die gettext("Couldn't exec:"), ": $!\n";
+     }
+@@ -139,6 +137,25 @@
+     return ($rc, $choice);
+ }
+ 
++=head2 backtitle
++
++Console header line for each page
++
++=cut
++
++sub backtitle
++{
++    my $self = shift;
++
++    my $db = esmith::ConfigDB->open_ro or die "Couldn't open ConfigDB\n";
++
++    sprintf("%-35s%45s",
++    ($db->get_prop('sysconfig', 'ProductName') || "SME Server") . " " .
++    ($db->get_prop('sysconfig', 'ReleaseVersion') || "UNKNOWN"),
++    "Copyright (C) 1999-2006 Mitel Corporation"
++    );
++}
++
+ =head2 message_page
+ 
+ This method should be used whenever a screen that displays a simple message
