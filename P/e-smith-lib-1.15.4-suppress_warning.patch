@@ -1,0 +1,11 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.15.4/root/usr/lib/perl5/site_perl/esmith/cgi.pm mezzanine_patched_e-smith-lib-1.15.4/root/usr/lib/perl5/site_perl/esmith/cgi.pm
+--- e-smith-lib-1.15.4/root/usr/lib/perl5/site_perl/esmith/cgi.pm	2006-02-16 22:52:14.000000000 -0500
++++ mezzanine_patched_e-smith-lib-1.15.4/root/usr/lib/perl5/site_perl/esmith/cgi.pm	2006-03-10 17:50:05.000000000 -0500
+@@ -289,6 +289,7 @@
+ sub genSmallCell
+ {
+     my ($q, $text, $type, $colspan) = @_;
++    $text ||= '';
+     $type ||= 'normal';
+     $colspan ||= 1;
+     if ($text =~ /^\s*$/){ $text = "&nbsp;" }

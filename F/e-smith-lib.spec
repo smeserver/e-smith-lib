@@ -2,13 +2,14 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.15.4
-%define release 01
+%define release 02
 Version: %{version}
 Release: %{release}
 License: Artistic
 Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
+Patch0: e-smith-lib-1.15.4-suppress_warning.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -25,6 +26,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Fri Mar 10 2006 Charlie Brady <charlie_brady@mitel.com> 1.15.4-02
+- Suppress warning from genSmallCell if text is undefined. [SME: 986]
+
 * Fri Feb 17 2006 Gordon Rowell <gordonr@gormand.com.au> 1.15.4-01
 - Roll patches up to 1.15.3-42
 - Trim changelog prior to 1.15.0-01 [SME: 828]
@@ -566,6 +570,7 @@ e-smith server and gateway software - library module.
 
 %prep
 %setup
+%patch0 -p1
 
 %pre
 # Remove legacy symlink if one exists
