@@ -1,0 +1,12 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/config.pm mezzanine_patched_e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/config.pm
+--- e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/config.pm	2006-02-17 14:52:14.000000000 +1100
++++ mezzanine_patched_e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/config.pm	2006-03-17 18:01:53.606279660 +1100
+@@ -488,7 +488,7 @@
+     _writeconf ($self->{FILENAME}, $self->{CONFIG});
+     $self->_unlock;
+ 
+-    &log("$self->{FILENAME}: DELETE $key");
++    &log("$self->{FILENAME}: DELETE $key=$previous");
+ 
+     return $previous;
+ }

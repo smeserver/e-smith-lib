@@ -2,13 +2,14 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.16.0
-%define release 01
+%define release 02
 Version: %{version}
 Release: %{release}
 License: Artistic
 Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
+Patch0: e-smith-lib-1.16.0-DBDeleteLog.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -25,6 +26,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Tue Mar 28 2006 Gordon Rowell <gordonr@gormand.com.au> 1.16.0-02
+- Log previous contents of db entry in DELETE log [SME: 1066]
+
 * Tue Mar 14 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-01
 - Roll to stable stream version number. [SME: 1016]
 
@@ -572,6 +576,7 @@ e-smith server and gateway software - library module.
 
 %prep
 %setup
+%patch0 -p1
 
 %pre
 # Remove legacy symlink if one exists
