@@ -1,0 +1,14 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/util.pm mezzanine_patched_e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/util.pm
+--- e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/util.pm	2006-02-17 14:52:14.000000000 +1100
++++ mezzanine_patched_e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/util.pm	2006-04-07 11:14:56.413672766 +1000
+@@ -710,10 +710,6 @@
+         exit 0;
+     }
+ 
+-    my $retval = system("$smbPasswdProg -e -s $username >/dev/null");
+-    ( $retval / 256 )
+-      && die "Failed to enable Samba account $username.\n";
+-
+     return 1;    # success
+ }
+ 
