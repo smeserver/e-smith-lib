@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.16.0
-%define release 03
+%define release 04
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -11,6 +11,7 @@ Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.16.0-DBDeleteLog.patch
 Patch1: e-smith-lib-1.16.0-NoSmbpasswdEnable.patch
+Patch2: e-smith-lib-1.16.0-kudzu.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -27,6 +28,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Thu Apr 13 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-04
+- Use "kudzu --probe --class network" for NIC detection. [SME: 557]
+
 * Fri Apr 7 2006 Gordon Rowell <gordonr@gormand.com.au> 1.16.0-03
 - Don't call smbpasswd -e - setting the password is sufficient [SME: 1193]
 
@@ -582,6 +586,7 @@ e-smith server and gateway software - library module.
 %setup
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %pre
 # Remove legacy symlink if one exists
