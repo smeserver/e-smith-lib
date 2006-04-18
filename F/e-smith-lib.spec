@@ -29,7 +29,7 @@ e-smith server and gateway software - library module.
 
 %changelog
 * Thu Apr 13 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-04
-- Use "kudzu --probe --class network" for NIC detection. [SME: 557]
+- Use "kudzu --probe --class network" for NIC detection. [SME: 727]
 
 * Fri Apr 7 2006 Gordon Rowell <gordonr@gormand.com.au> 1.16.0-03
 - Don't call smbpasswd -e - setting the password is sufficient [SME: 1193]
