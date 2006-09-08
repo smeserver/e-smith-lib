@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.16.0
-%define release 04
+%define release 05
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -12,6 +12,7 @@ Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.16.0-DBDeleteLog.patch
 Patch1: e-smith-lib-1.16.0-NoSmbpasswdEnable.patch
 Patch2: e-smith-lib-1.16.0-kudzu.patch
+Patch3: e-smith-lib-1.16.0-templates.metadata.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -28,6 +29,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Fri Sep 08 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-05
+- Fix taint problem in template.metadata handling. [SME: 1906]
+
 * Thu Apr 13 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-04
 - Use "kudzu --probe --class network" for NIC detection. [SME: 727]
 
@@ -587,6 +591,7 @@ e-smith server and gateway software - library module.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %pre
 # Remove legacy symlink if one exists
