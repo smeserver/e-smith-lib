@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.16.0
-%define release 05
+%define release 06
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -13,6 +13,7 @@ Patch0: e-smith-lib-1.16.0-DBDeleteLog.patch
 Patch1: e-smith-lib-1.16.0-NoSmbpasswdEnable.patch
 Patch2: e-smith-lib-1.16.0-kudzu.patch
 Patch3: e-smith-lib-1.16.0-templates.metadata.patch
+Patch4: e-smith-lib-1.16.0-templates.metadata.patch2
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -29,6 +30,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Mon Sep 25 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-06
+- Fix problem with greedy RE in template.metadata parsing. [SME: 1906]
+
 * Fri Sep 08 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-05
 - Fix taint problem in template.metadata handling. [SME: 1906]
 
@@ -592,6 +596,7 @@ e-smith server and gateway software - library module.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %pre
 # Remove legacy symlink if one exists

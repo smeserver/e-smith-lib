@@ -1,0 +1,12 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/templates.pm mezzanine_patched_e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/templates.pm
+--- e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/templates.pm	2006-09-25 13:51:59.000000000 -0400
++++ mezzanine_patched_e-smith-lib-1.16.0/root/usr/lib/perl5/site_perl/esmith/templates.pm	2006-09-25 13:51:44.000000000 -0400
+@@ -351,7 +351,7 @@
+     {
+ 	while (<FILE>)
+ 	{
+-	    /^(.+)=(.*)$/;
++	    /^([^=]+)=(.*)$/;
+ 	    $params_hash{$1} = eval $2;
+ 	}
+ 	close(FILE);
