@@ -1,0 +1,175 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/console.pm mezzanine_patched_e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/console.pm
+--- e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2006-10-23 11:14:17.000000000 -0400
++++ mezzanine_patched_e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2006-10-23 10:33:53.000000000 -0400
+@@ -38,6 +38,7 @@
+ use esmith::util;
+ use Locale::gettext;
+ use esmith::ConfigDB;
++use esmith::I18N;
+ 
+ @ISA = qw(Exporter);
+ 
+@@ -45,6 +46,21 @@
+ use constant SCREEN_COLUMNS => 76;
+ use constant CONSOLE_SCREENS => "/sbin/e-smith/console-screens";
+ 
++BEGIN
++{
++    # disable CTRL-C
++    $SIG{INT} = 'IGNORE';
++
++    # Set PATH explicitly and clear related environment variables so that calls
++    # to external programs do not cause results to be tainted. See
++    # "perlsec" manual page for details.
++
++    $ENV {'PATH'} = '/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin';
++    $ENV {'SHELL'} = '/bin/bash';
++    delete $ENV {'ENV'};
++    delete $ENV {'BASH_ENV'};
++}
++
+ =head2 new
+ 
+ This is the class constructor.
+@@ -55,6 +71,35 @@
+ {
+     my $class = ref($_[0]) || $_[0];
+     my $self = {};
++    esmith::util::setRealToEffective ();
++
++    my $i18n = new esmith::I18N;
++    $i18n->setLocale("server-console");
++
++    #------------------------------------------------------------
++    # Set stdin, stdout and stderr to console
++    #------------------------------------------------------------
++
++    my $tty = 'tty';
++
++    if (defined $ARGV [0])
++    {
++	$ARGV[0] =~ /(console|tty\d*)/ && -c "/dev/$1"
++	    or die gettext("Bad ttyname:"), " ", $ARGV[0], "\n";
++	$tty = $1;
++    }
++
++    open (STDIN,  "</dev/$tty") or die gettext("Can't redirect stdin"),  ": $!\n";
++    open (STDOUT, ">/dev/$tty") or die gettext("Can't redirect stdout"), ": $!\n";
++
++    my $pid = open(STDERR, "|-");
++    die gettext("Can't fork"), ": $!\n" unless defined $pid;
++
++    unless ($pid)
++    {
++	exec qw(/usr/bin/logger -p local1.info -t console);
++    }
++
+     $self = bless $self, $class;
+     return $self;
+ }
+@@ -69,12 +114,17 @@
+ 
+ =cut
+ 
++sub screen
++{
++    _screen(shift, "/usr/bin/dialog", @_);
++}
++
+ sub dialog
+ {
+     _screen(shift, "/usr/bin/dialog", @_);
+ }
+ 
+-sub screen
++sub whiptail
+ {
+     _screen(shift, "/sbin/e-smith/whiptail", @_);
+ }
+@@ -184,9 +234,9 @@
+     my $right = defined $params{right} ? $params{right} : gettext("Next");
+ 
+     $self->screen ("--title",  $title,
++                   "--cancel-label",   $left,
++                   "--ok-label",  $right,
+                    "--msgbox", $message_box,
+-                   "--left",   $left,
+-                   "--right",  $right,
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
+                   );
+@@ -211,9 +261,9 @@
+     my $message_box = $title . ":'${choice}'" . $try_again;
+ 
+     $self->screen ("--title",  $title,
++                   "--cancel-label",  gettext("Back"),
++                   "--ok-label", gettext("Next"),
+                    "--msgbox", $message_box,
+-                   "--left",  gettext("Back"),
+-                   "--right", gettext("Next"),
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
+                   );
+@@ -236,11 +286,11 @@
+     my $left  = defined $params{left} ? $params{left} : gettext("Back");
+     my $right = defined $params{right} ? $params{right} : gettext("Next");
+ 
+-    $self->screen ("--title",  $title,
++    $self->whiptail ("--title",  $title,
+                    "--password",
++                   "--cancel-label",  $left,
++                   "--ok-label", $right,
+                    "--inputbox", "\n" . $message_box,
+-                   "--left",  $left,
+-                   "--right", $right,
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
+                   );
+@@ -265,9 +315,9 @@
+     my $right = defined $params{right} ? $params{right} : gettext("No");
+ 
+     $self->screen ("--title",  $title,
++                   "--yes-label",   $left,
++                   "--no-label",  $right,
+                    "--yesno",  $text,
+-                   "--left",   $left,
+-                   "--right",  $right,
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
+                   );
+@@ -292,8 +342,8 @@
+     my $right = defined $params{right} ? $params{right} : gettext("Next");
+ 
+     $self->screen("--title", $title,
+-                  "--left",  $left,
+-                  "--right", $right,
++                  "--cancel-label",  $left,
++                  "--ok-label", $right,
+                   "--inputbox", $text,
+                   SCREEN_ROWS,
+                   SCREEN_COLUMNS,
+@@ -314,6 +364,11 @@
+ 
+     my $title = $params{title};
+     my $text  = $params{text};
++    my @args = ("--title", $title);
++    if ($params{default})
++    {
++        push @args, "--default-item", $params{default};
++    }
+ 
+     my $value     = $params{value};
+     my $argsref   = $params{argsref};
+@@ -325,9 +380,9 @@
+     my $left  = defined $params{left} ? $params{left} : gettext("Back");
+     my $right = defined $params{right} ? $params{right} : gettext("Next");
+ 
+-    $self->screen("--title", $title,
+-                  "--left",  $left,
+-                  "--right", $right,
++    $self->dialog(@args,
++                  "--cancel-label",  $left,
++                  "--ok-label", $right,
+                   "--menu", $text,
+                   SCREEN_ROWS,
+                   SCREEN_COLUMNS,

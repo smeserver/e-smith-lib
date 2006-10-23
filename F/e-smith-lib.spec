@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.17.0
-%define release 02
+%define release 03
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -10,12 +10,15 @@ Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.17.0-dialog.console.patch
+Patch1: e-smith-lib-1.17.0-dialog.console.patch2
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
 BuildRequires: e-smith-test >= 0.1.14
 Obsoletes: %{name}-Tai64n
+Requires: dialog
+Requires: whiptail
 Requires: perl, perl(Text::Template)
 Requires: perl(Time::HiRes), perl(MIME::Base64)
 Requires: perl(Authen::PAM), perl(I18N::AcceptLanguage)
@@ -26,6 +29,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Mon Oct 23 2006 Charlie Brady <charlie_brady@mitel.com> 1.17.0-03
+- Make dialog the default console app, with whiptail used only when
+  required.
+
 * Wed Oct 11 2006 Charlie Brady <charlie_brady@mitel.com> 1.17.0-02
 - Allow 'dialog' to be called from esmith::console. [SME: 1958]
 
@@ -595,6 +602,7 @@ e-smith server and gateway software - library module.
 %prep
 %setup
 %patch0 -p1
+%patch1 -p1
 
 %pre
 # Remove legacy symlink if one exists
