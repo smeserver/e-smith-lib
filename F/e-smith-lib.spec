@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.17.0
-%define release 03
+%define release 04
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -11,6 +11,7 @@ Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.17.0-dialog.console.patch
 Patch1: e-smith-lib-1.17.0-dialog.console.patch2
+Patch2: e-smith-lib-1.17.0-genSmallCell.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -29,6 +30,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Tue Nov 07 2006 Charlie Brady <charlie_brady@mitel.com> 1.17.0-04
+- Allow display of "0" in iesmith::cgi::genSmallCell. [SME: 2038]
+
 * Mon Oct 23 2006 Charlie Brady <charlie_brady@mitel.com> 1.17.0-03
 - Make dialog the default console app, with whiptail used only when
   required.
@@ -603,6 +607,7 @@ e-smith server and gateway software - library module.
 %setup
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %pre
 # Remove legacy symlink if one exists
