@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.16.0
-%define release 06
+%define release 07
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -14,6 +14,7 @@ Patch1: e-smith-lib-1.16.0-NoSmbpasswdEnable.patch
 Patch2: e-smith-lib-1.16.0-kudzu.patch
 Patch3: e-smith-lib-1.16.0-templates.metadata.patch
 Patch4: e-smith-lib-1.16.0-templates.metadata.patch2
+Patch5: e-smith-lib-1.16.0-genSmallCell.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -30,6 +31,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Tue Nov 07 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-07
+- Allow esmith::cgi::genSmallCell to display "0". (backported from
+  1.17.0-04). [SME: 2038]
+
 * Mon Sep 25 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-06
 - Fix problem with greedy RE in template.metadata parsing. [SME: 1906]
 
@@ -597,6 +602,7 @@ e-smith server and gateway software - library module.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %pre
 # Remove legacy symlink if one exists
