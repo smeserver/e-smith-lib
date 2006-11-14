@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.17.0
-%define release 04
+%define release 05
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -12,6 +12,7 @@ Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.17.0-dialog.console.patch
 Patch1: e-smith-lib-1.17.0-dialog.console.patch2
 Patch2: e-smith-lib-1.17.0-genSmallCell.patch
+Patch3: e-smith-lib-1.17.0-dialog.console.patch3
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -30,6 +31,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Tue Nov 14 2006 Charlie Brady <charlie_brady@mitel.com>
+- Allow defaulno option to esmith::console::yesno.
+- Fix I/O redirection in esmith::console::new.
+
 * Tue Nov 07 2006 Charlie Brady <charlie_brady@mitel.com> 1.17.0-04
 - Allow display of "0" in iesmith::cgi::genSmallCell. [SME: 2038]
 
@@ -608,6 +613,7 @@ e-smith server and gateway software - library module.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %pre
 # Remove legacy symlink if one exists

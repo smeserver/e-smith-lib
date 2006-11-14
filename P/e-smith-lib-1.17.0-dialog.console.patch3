@@ -1,0 +1,55 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/console.pm mezzanine_patched_e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/console.pm
+--- e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2006-11-14 15:24:52.000000000 -0500
++++ mezzanine_patched_e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2006-11-14 15:24:23.000000000 -0500
+@@ -80,24 +80,22 @@
+     # Set stdin, stdout and stderr to console
+     #------------------------------------------------------------
+ 
+-    my $tty = 'tty';
+-
+     if (defined $ARGV [0])
+     {
+ 	$ARGV[0] =~ /(console|tty\d*)/ && -c "/dev/$1"
+ 	    or die gettext("Bad ttyname:"), " ", $ARGV[0], "\n";
+-	$tty = $1;
+-    }
++	my $tty = $1;
+ 
+-    open (STDIN,  "</dev/$tty") or die gettext("Can't redirect stdin"),  ": $!\n";
+-    open (STDOUT, ">/dev/$tty") or die gettext("Can't redirect stdout"), ": $!\n";
++	open (STDIN,  "</dev/$tty") or die gettext("Can't redirect stdin"),  ": $!\n";
++	open (STDOUT, ">/dev/$tty") or die gettext("Can't redirect stdout"), ": $!\n";
+ 
+-    my $pid = open(STDERR, "|-");
+-    die gettext("Can't fork"), ": $!\n" unless defined $pid;
++	my $pid = open(STDERR, "|-");
++	die gettext("Can't fork"), ": $!\n" unless defined $pid;
+ 
+-    unless ($pid)
+-    {
+-	exec qw(/usr/bin/logger -p local1.info -t console);
++	unless ($pid)
++	{
++	    exec qw(/usr/bin/logger -p local1.info -t console);
++	}
+     }
+ 
+     $self = bless $self, $class;
+@@ -313,10 +311,14 @@
+ 
+     my $left  = defined $params{left} ? $params{left} : gettext("Yes");
+     my $right = defined $params{right} ? $params{right} : gettext("No");
++    my @args = (
++	    "--title" =>  $title,
++	    "--yes-label" =>   $left,
++	    "--no-label" =>  $right,
++	);
++    push @args, "--defaultno" if defined $params{defaultno};
+ 
+-    $self->screen ("--title",  $title,
+-                   "--yes-label",   $left,
+-                   "--no-label",  $right,
++    $self->screen (@args,
+                    "--yesno",  $text,
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
