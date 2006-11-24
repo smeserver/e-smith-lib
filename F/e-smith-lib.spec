@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.17.0
-%define release 05
+%define release 06
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -13,6 +13,7 @@ Patch0: e-smith-lib-1.17.0-dialog.console.patch
 Patch1: e-smith-lib-1.17.0-dialog.console.patch2
 Patch2: e-smith-lib-1.17.0-genSmallCell.patch
 Patch3: e-smith-lib-1.17.0-dialog.console.patch3
+Patch4: e-smith-lib-1.17.0-configure_peers.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -31,7 +32,11 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
-* Tue Nov 14 2006 Charlie Brady <charlie_brady@mitel.com>
+* Fri Nov 24 2006 Gordon Rowell <gordonr@gormand.com.au> 1.17.0-06
+- Allow optional path to peeers directory in 
+  esmith::tcpsvd::configure_peers() [SME: 2086]
+
+* Tue Nov 14 2006 Charlie Brady <charlie_brady@mitel.com> 1.17.0-05
 - Allow defaulno option to esmith::console::yesno.
 - Fix I/O redirection in esmith::console::new.
 
@@ -614,6 +619,7 @@ e-smith server and gateway software - library module.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %pre
 # Remove legacy symlink if one exists
