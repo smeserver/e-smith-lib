@@ -1,0 +1,37 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm mezzanine_patched_e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm
+--- e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm	2006-02-17 14:52:14.000000000 +1100
++++ mezzanine_patched_e-smith-lib-1.17.0/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm	2006-11-24 11:01:22.771895590 +1100
+@@ -1,5 +1,5 @@
+ #----------------------------------------------------------------------
+-# Copyright 2005 Mitel Networks Corporation
++# Copyright 2005-2006 Mitel Networks Corporation
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ #----------------------------------------------------------------------
+@@ -31,12 +31,13 @@
+ use esmith::util;
+ use Carp;
+ 
+-=head2 configure_peers($service)
++=head2 configure_peers($service [, $peers_directory] )
+ 
+ configure_peers() configures the "peers" direectory used by tcpsvd for
+ access control and environment maipulation.  $service identifies the name
+-of the service managed by supervise or runit. The peers directory (path
+-"/var/service/$service/peers" is expected to contain files "0" defining
++of the service managed by supervise or runit. The peers directory (as
++specified by the optional $peers_directory argument, defaulting to 
++"/var/service/$service/peers") is expected to contain files "0" defining
+ access conditions for public (default) accesss, and "local", defining
+ access conditions for local access. configure_peers() creates a set of
+ symlinks so that tcpsvd uses "local" for all local network access to
+@@ -50,7 +51,8 @@
+ sub configure_peers
+ {
+     my $service = shift;
+-    my $peers = "/var/service/$service/peers";
++    my $peers = shift || "/var/service/$service/peers";
++
+     unless (opendir(PEERS, $peers))
+     {
+ 	carp "Cannot read peers directory: $!";
