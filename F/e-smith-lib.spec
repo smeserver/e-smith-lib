@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.16.0
-%define release 07
+%define release 08
 Version: %{version}
 Release: %{release}
 License: Artistic
@@ -15,6 +15,7 @@ Patch2: e-smith-lib-1.16.0-kudzu.patch
 Patch3: e-smith-lib-1.16.0-templates.metadata.patch
 Patch4: e-smith-lib-1.16.0-templates.metadata.patch2
 Patch5: e-smith-lib-1.16.0-genSmallCell.patch
+Patch6: e-smith-lib-1.17.0-configure_peers.patch
 Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
@@ -31,6 +32,11 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Fri Nov 24 2006 Gordon Rowell <gordonr@gormand.com.au> 1.16.0-08
+- Backport of 1.17.0-06
+- Allow optional path to peeers directory in
+  esmith::tcpsvd::configure_peers() [SME: 2086]
+
 * Tue Nov 07 2006 Charlie Brady <charlie_brady@mitel.com> 1.16.0-07
 - Allow esmith::cgi::genSmallCell to display "0". (backported from
   1.17.0-04). [SME: 2038]
@@ -603,6 +609,7 @@ e-smith server and gateway software - library module.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %pre
 # Remove legacy symlink if one exists
