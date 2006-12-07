@@ -2,9 +2,10 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.16.0
-%define release 08
+%define release 9
 Version: %{version}
-Release: %{release}
+Release: %smerelease %{release}
+Packager: %{_packager}
 License: Artistic
 Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
@@ -16,7 +17,6 @@ Patch3: e-smith-lib-1.16.0-templates.metadata.patch
 Patch4: e-smith-lib-1.16.0-templates.metadata.patch2
 Patch5: e-smith-lib-1.16.0-genSmallCell.patch
 Patch6: e-smith-lib-1.17.0-configure_peers.patch
-Packager: e-smith developers <bugs@e-smith.com>
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -32,6 +32,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Thu Dec 07 2006 Shad L. Lords <slords@mail.com>
+- Update to new release naming.  No functional changes.
+- Make Packager generic
+
 * Fri Nov 24 2006 Gordon Rowell <gordonr@gormand.com.au> 1.16.0-08
 - Backport of 1.17.0-06
 - Allow optional path to peeers directory in
