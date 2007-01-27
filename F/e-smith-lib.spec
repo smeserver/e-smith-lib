@@ -1,8 +1,8 @@
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
-%define version 1.17.0
-%define release 8
+%define version 1.18.0
+%define release 1
 Version: %{version}
 Release: %smerelease %{release}
 Packager: %{_packager}
@@ -10,12 +10,6 @@ License: Artistic
 Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
-Patch0: e-smith-lib-1.17.0-dialog.console.patch
-Patch1: e-smith-lib-1.17.0-dialog.console.patch2
-Patch2: e-smith-lib-1.17.0-genSmallCell.patch
-Patch3: e-smith-lib-1.17.0-dialog.console.patch3
-Patch4: e-smith-lib-1.17.0-configure_peers.patch
-Patch5: e-smith-lib-1.16.0-ValidatePassword.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -33,6 +27,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Fri Jan 26 2007 Shad L. Lords <slords@mail.com> 1.18.0-1
+- Roll stable stream. [SME: 2328]
+
 * Tue Dec 15 2006 Federico Simoncelli <federico.simoncelli@gmail.com> 1.17.0-8
 - Added the validatePassword function to esmith::util. [SME: 2100]
 
@@ -623,12 +620,6 @@ e-smith server and gateway software - library module.
 
 %prep
 %setup
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 %pre
 # Remove legacy symlink if one exists
