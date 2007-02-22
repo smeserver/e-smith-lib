@@ -1,0 +1,85 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2007-02-22 17:46:27.000000000 -0500
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2007-02-22 17:45:45.000000000 -0500
+@@ -172,7 +172,6 @@
+ 
+ 
+         unshift @whiptailArgs, $whiptail,
+-            '--clear',
+             '--backtitle', $self->backtitle;
+         exec @whiptailArgs;
+         die gettext("Couldn't exec:"), ": $!\n";
+@@ -235,6 +234,7 @@
+                    "--cancel-label",   $left,
+                    "--ok-label",  $right,
+                    "--msgbox", $message_box,
++                   "--clear",
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
+                   );
+@@ -262,6 +262,7 @@
+                    "--cancel-label",  gettext("Back"),
+                    "--ok-label", gettext("Next"),
+                    "--msgbox", $message_box,
++                   "--clear",
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
+                   );
+@@ -285,6 +286,7 @@
+     my $right = defined $params{right} ? $params{right} : gettext("Next");
+ 
+     $self->whiptail ("--title",  $title,
++                   "--clear",
+                    "--password",
+                    "--cancel-label",  $left,
+                    "--ok-label", $right,
+@@ -317,6 +319,7 @@
+ 	    "--no-label" =>  $right,
+ 	);
+     push @args, "--defaultno" if defined $params{defaultno};
++    push @args, "--clear";
+ 
+     $self->screen (@args,
+                    "--yesno",  $text,
+@@ -347,12 +350,32 @@
+                   "--cancel-label",  $left,
+                   "--ok-label", $right,
+                   "--inputbox", $text,
++                  "--clear",
+                   SCREEN_ROWS,
+                   SCREEN_COLUMNS,
+                   $value
+                  );
+ }
+ 
++=head2 infobox
++
++This method is similar to a messagebox, but exits immediately, without clearing the screen.
++
++=cut
++
++sub infobox
++{
++    my $self = shift;
++    my %params = @_;
++    my $title  = $params{title};
++    my $text   = $params{text};
++    $self->screen("--title", $title,
++                  "--infobox", $text,
++                  SCREEN_ROWS,
++                  SCREEN_COLUMNS,
++                 );
++}
++
+ =head2 menu_page
+ 
+ This method displays a screen with a menu.
+@@ -366,7 +389,7 @@
+ 
+     my $title = $params{title};
+     my $text  = $params{text};
+-    my @args = ("--title", $title);
++    my @args = ("--clear", "--title", $title);
+     if ($params{default})
+     {
+         push @args, "--default-item", $params{default};
