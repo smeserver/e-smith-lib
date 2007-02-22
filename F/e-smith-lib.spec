@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 3
+%define release 4
 Version: %{version}
 Release: %smerelease %{release}
 Packager: %{_packager}
@@ -12,6 +12,7 @@ Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch1: e-smith-lib-1.18.0-backtitle.patch
 Patch2: e-smith-lib-1.18.0-infobox.patch
+Patch3: e-smith-lib-1.18.0-password_page.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -29,6 +30,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Thu Feb 22 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-4
+- switch esmith::console::password_page() to use dialog rather than
+  whiptail. [SME: 2534]
+
 * Thu Feb 22 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-3
 - Add infobox widget. [SME: 2533]
 
@@ -630,6 +635,7 @@ e-smith server and gateway software - library module.
 %setup
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %pre
 # Remove legacy symlink if one exists
