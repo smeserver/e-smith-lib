@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 5
+%define release 6
 Version: %{version}
 Release: %smerelease %{release}
 Packager: %{_packager}
@@ -14,6 +14,7 @@ Patch1: e-smith-lib-1.18.0-backtitle.patch
 Patch2: e-smith-lib-1.18.0-infobox.patch
 Patch3: e-smith-lib-1.18.0-password_page.patch
 Patch4: e-smith-lib-1.18.0-clear.patch
+Patch5: e-smith-lib-1.18.0-clear.patch2
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -31,8 +32,11 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Fri Feb 23 2007 Shad L. Lords <slords@mail.com> 1.18.0-6
+- Really fix clear parameter for dialog screens [SME: 2534]
+
 * Fri Feb 23 2007 Shad L. Lords <slords@mail.com> 1.18.0-5
-- Fix clear parameters for dialog screens [SME: 2534]
+- Fix clear parameter for dialog screens [SME: 2534]
 
 * Thu Feb 22 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-4
 - switch esmith::console::password_page() to use dialog rather than
@@ -641,6 +645,7 @@ e-smith server and gateway software - library module.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %pre
 # Remove legacy symlink if one exists

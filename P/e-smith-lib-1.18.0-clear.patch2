@@ -1,0 +1,13 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2007-02-23 09:56:41.000000000 -0700
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2007-02-23 09:56:27.000000000 -0700
+@@ -349,8 +349,8 @@
+     $self->screen("--title", $title,
+                   "--cancel-label",  $left,
+                   "--ok-label", $right,
+-                  "--inputbox", $text,
+                   "--clear",
++                  "--inputbox", $text,
+                   SCREEN_ROWS,
+                   SCREEN_COLUMNS,
+                   $value
