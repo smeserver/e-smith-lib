@@ -33,10 +33,10 @@ e-smith server and gateway software - library module.
 
 %changelog
 * Fri Feb 23 2007 Shad L. Lords <slords@mail.com> 1.18.0-6
-- Really fix clear parameter for dialog screens [SME: 2534]
+- Really fix clear parameter for inputbox dialog screen [SME: 2533]
 
 * Fri Feb 23 2007 Shad L. Lords <slords@mail.com> 1.18.0-5
-- Fix clear parameter for dialog screens [SME: 2534]
+- Fix clear parameter for dialog screens [SME: 2533]
 
 * Thu Feb 22 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-4
 - switch esmith::console::password_page() to use dialog rather than
