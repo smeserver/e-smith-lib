@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 7
+%define release 8
 Version: %{version}
 Release: %smerelease %{release}
 Packager: %{_packager}
@@ -16,6 +16,7 @@ Patch3: e-smith-lib-1.18.0-password_page.patch
 Patch4: e-smith-lib-1.18.0-clear.patch
 Patch5: e-smith-lib-1.18.0-clear.patch2
 Patch6: e-smith-lib-1.18.0-infobox.patch2
+Patch7: e-smith-lib-1.18.0-gauge.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -33,6 +34,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Wed Feb 28 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-8
+- Add gauge widget to esmith::console. [SME: 2579]
+
 * Sun Feb 25 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-7
 - Default infobox height to 8 rows, and allow override via params.
   [SME: 2560]
@@ -652,6 +656,7 @@ e-smith server and gateway software - library module.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %pre
 # Remove legacy symlink if one exists
