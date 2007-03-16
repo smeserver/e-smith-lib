@@ -1,0 +1,73 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/templates.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/templates.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/templates.pm	2006-10-11 11:14:18.000000000 -0400
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/templates.pm	2007-03-16 11:41:15.000000000 -0400
+@@ -1,5 +1,5 @@
+ #----------------------------------------------------------------------
+-# Copyright 1999-2003 Mitel Networks Corporation
++# Copyright 1999-2007 Mitel Networks Corporation
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ #----------------------------------------------------------------------
+@@ -22,6 +22,7 @@
+ use File::Basename;
+ use File::stat;
+ use FileHandle;
++use DirHandle;
+ 
+ $TEMPLATE_COUNT = 0;
+ 
+@@ -322,6 +323,7 @@
+         GID           => 0,
+         PERMS         => 0644,
+         OUTPUT_TYPE   => 'file',           # [file|string]
++        DELETE        => 0,
+     );
+ 
+     # store the valid output types so we can do a quick sanity check
+@@ -347,7 +349,8 @@
+     }
+ 
+     # Read additional metadata assocated with the templated file
+-    if (open(FILE, "/etc/e-smith/templates.metadata/$params_hash{TEMPLATE_PATH}"))
++    my $metadata_path = "/etc/e-smith/templates.metadata/$params_hash{TEMPLATE_PATH}";
++    if (open(FILE, $metadata_path))
+     {
+ 	while (<FILE>)
+ 	{
+@@ -356,6 +359,22 @@
+ 	}
+ 	close(FILE);
+     }
++    if (my $d = DirHandle->new($metadata_path))
++    {
++        while ($_ = $d->read)
++        {
++            /(\w+)/ or next;  # skip . and ..
++            my $file = $1;
++            unless (open(FILE, "$metadata_path/$file"))
++            {
++                warn("Could not open metadata file $metadata_path/$file: $!");
++                next;
++            }
++            # Read and untaint content of file
++            $params_hash{$file} = eval do { local $/; $_ = <FILE>; /(.*)/s ; "{ $1 }" };
++            close(FILE);
++        }
++    }
+ 
+     # warn on deprecated or unknown parameters
+     foreach my $key ( keys %params_hash ) {
+@@ -419,6 +438,13 @@
+ 	    return;
+         }
+ 
++	# delete the file and do no more if we're told to by metadata
++        if ($p{'DELETE'})
++        {
++            unlink "$outputfile";
++            return;
++        }
++
+         # use POSIX::open to set permissions on create
+         require POSIX;
+         my $fd =

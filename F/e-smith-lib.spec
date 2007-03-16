@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 8
+%define release 9
 Version: %{version}
 Release: %smerelease %{release}
 Packager: %{_packager}
@@ -17,6 +17,7 @@ Patch4: e-smith-lib-1.18.0-clear.patch
 Patch5: e-smith-lib-1.18.0-clear.patch2
 Patch6: e-smith-lib-1.18.0-infobox.patch2
 Patch7: e-smith-lib-1.18.0-gauge.patch
+Patch8: e-smith-lib-1.18.0-templates.metadata.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -34,6 +35,11 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Fri Mar 16 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-9
+- Allow template.metadata to be provided via a directory of
+  small files. [SME: 2690]
+- Add support for a DELETE boolean template.metadata item. [SME: 2691]
+
 * Wed Feb 28 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-8
 - Add gauge widget to esmith::console. [SME: 2579]
 
@@ -657,6 +663,7 @@ e-smith server and gateway software - library module.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %pre
 # Remove legacy symlink if one exists
