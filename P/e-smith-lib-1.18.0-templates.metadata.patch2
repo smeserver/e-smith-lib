@@ -1,0 +1,16 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/templates.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/templates.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/templates.pm	2007-03-19 11:24:00.000000000 -0400
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/templates.pm	2007-03-19 11:23:44.000000000 -0400
+@@ -363,8 +363,10 @@
+     {
+         while ($_ = $d->read)
+         {
+-            /(\w+)/ or next;  # skip . and ..
+-            my $file = $1;
++	    # skip any directories, including . and ..
++            next if -d "$metadata_path/$_";
++	    # Untaint filename
++            /(\w+)/; my $file = $1;
+             unless (open(FILE, "$metadata_path/$file"))
+             {
+                 warn("Could not open metadata file $metadata_path/$file: $!");

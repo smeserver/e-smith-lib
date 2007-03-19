@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 9
+%define release 10
 Version: %{version}
 Release: %smerelease %{release}
 Packager: %{_packager}
@@ -18,6 +18,7 @@ Patch5: e-smith-lib-1.18.0-clear.patch2
 Patch6: e-smith-lib-1.18.0-infobox.patch2
 Patch7: e-smith-lib-1.18.0-gauge.patch
 Patch8: e-smith-lib-1.18.0-templates.metadata.patch
+Patch9: e-smith-lib-1.18.0-templates.metadata.patch2
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -35,6 +36,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Mon Mar 19 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-10
+  Don't try to read template.metadata from subdirectories (affects 
+  initialize_database_defaults). [SME: 2690]
+
 * Fri Mar 16 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-9
 - Allow template.metadata to be provided via a directory of
   small files. [SME: 2690]
@@ -664,6 +669,7 @@ e-smith server and gateway software - library module.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 %pre
 # Remove legacy symlink if one exists
