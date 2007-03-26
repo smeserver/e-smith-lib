@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 10
+%define release 11
 Version: %{version}
 Release: %smerelease %{release}
 Packager: %{_packager}
@@ -19,6 +19,7 @@ Patch6: e-smith-lib-1.18.0-infobox.patch2
 Patch7: e-smith-lib-1.18.0-gauge.patch
 Patch8: e-smith-lib-1.18.0-templates.metadata.patch
 Patch9: e-smith-lib-1.18.0-templates.metadata.patch2
+Patch10: e-smith-lib-1.18.0-logfile_rotation.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -36,6 +37,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Mon Mar 26 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-11
+- Split logfile rotation code out of generic_template_expand.
+  Code moved to a new action in e-smith-base. [SME: 2795]
+
 * Mon Mar 19 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-10
   Don't try to read template.metadata from subdirectories (affects 
   initialize_database_defaults). [SME: 2690]
@@ -670,6 +675,7 @@ e-smith server and gateway software - library module.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch11 -p1
 
 %pre
 # Remove legacy symlink if one exists
