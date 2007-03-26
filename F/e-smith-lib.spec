@@ -675,7 +675,7 @@ e-smith server and gateway software - library module.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch11 -p1
+%patch10 -p1
 
 %pre
 # Remove legacy symlink if one exists
