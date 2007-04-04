@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 12
+%define release 13
 Version: %{version}
 Release: %smerelease %{release}
 Packager: %{_packager}
@@ -21,6 +21,7 @@ Patch8: e-smith-lib-1.18.0-templates.metadata.patch
 Patch9: e-smith-lib-1.18.0-templates.metadata.patch2
 Patch10: e-smith-lib-1.18.0-logfile_rotation.patch
 Patch11: e-smith-lib-1.18.0-generic_template_expand.patch
+Patch12: e-smith-lib-1.18.0-gauge.patch2
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -38,6 +39,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Wed Apr 04 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-13
+- Allow gauge console widget to be used without following message_page.
+  [SME: 2832].
+
 * Mon Mar 26 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-12
 - Remove undocumented and unused template metadata handling from
   generic_template_expand action. [SME: 2798]
@@ -682,6 +687,7 @@ e-smith server and gateway software - library module.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 %pre
 # Remove legacy symlink if one exists
