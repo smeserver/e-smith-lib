@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 13
+%define release 14
 Version: %{version}
 Release: %smerelease %{release}
 Packager: %{_packager}
@@ -39,6 +39,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Thu Apr 05 2007 Shad L. Lords <slords@mail.com> 1.18.0-14
+- Reverse changes for 1.18.0-12 as it is being used. [SME: 2838]
+
 * Wed Apr 04 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-13
 - Allow gauge console widget to be used without following message_page.
   [SME: 2832].
@@ -686,7 +689,7 @@ e-smith server and gateway software - library module.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-%patch11 -p1
+#%patch11 -p1
 %patch12 -p1
 
 %pre
