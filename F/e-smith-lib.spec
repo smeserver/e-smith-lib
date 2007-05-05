@@ -4,10 +4,8 @@ Name: %{name}
 %define version 1.18.0
 %define release 14
 Version: %{version}
-Release: %smerelease %{release}
-Packager: %{_packager}
+Release: %{release}%{?dist}
 License: Artistic
-Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch1: e-smith-lib-1.18.0-backtitle.patch
@@ -25,7 +23,6 @@ Patch12: e-smith-lib-1.18.0-gauge.patch2
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
-BuildRequires: e-smith-test >= 0.1.14
 Obsoletes: %{name}-Tai64n
 Requires: dialog
 Requires: whiptail
@@ -39,6 +36,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Sun Apr 29 2007 Shad L. Lords <slords@mail.com>
+- Clean up spec so package can be built by koji/plague
+
 * Thu Apr 05 2007 Shad L. Lords <slords@mail.com> 1.18.0-14
 - Reverse changes for 1.18.0-12 as it is being used. [SME: 2838]
 
@@ -732,8 +732,6 @@ do
     mkdir -p root/etc/e-smith/events/$event
 done
 perl createlinks
-# build the test suite from embedded tests
-/sbin/e-smith/buildtests 10e-smith-lib
 
 %install
 rm -rf $RPM_BUILD_ROOT
