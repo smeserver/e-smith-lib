@@ -4,10 +4,8 @@ Name: %{name}
 %define version 1.18.0
 %define release 8
 Version: %{version}
-Release: %smerelease %{release}
-Packager: %{_packager}
+Release: %{release}%{?dist}
 License: Artistic
-Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch1: e-smith-lib-1.18.0-backtitle.patch
@@ -34,6 +32,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Sun Apr 29 2007 Shad L. Lords <slords@mail.com>
+- Clean up spec so package can be built by koji/plague
+
 * Wed Feb 28 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-8
 - Add gauge widget to esmith::console. [SME: 2579]
 
