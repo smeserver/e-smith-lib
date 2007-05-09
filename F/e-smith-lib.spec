@@ -4,10 +4,8 @@ Name: %{name}
 %define version 1.16.0
 %define release 10
 Version: %{version}
-Release: %smerelease %{release}
-Packager: %{_packager}
+Release: %{release}%{?dist}
 License: Artistic
-Vendor: Mitel Networks Corporation
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch0: e-smith-lib-1.16.0-DBDeleteLog.patch
@@ -33,6 +31,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Sun Apr 29 2007 Shad L. Lords <slords@mail.com>
+- Clean up spec so package can be built by koji/plague
+
 * Tue Dec 12 2006 Federico Simoncelli <federico.simoncelli@gmail.com> 1.16.0-10
 - Added the validatePassword function to esmith::util. [SME: 2100]
 
