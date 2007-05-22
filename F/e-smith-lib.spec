@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 14
+%define release 15
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -20,6 +20,7 @@ Patch9: e-smith-lib-1.18.0-templates.metadata.patch2
 Patch10: e-smith-lib-1.18.0-logfile_rotation.patch
 Patch11: e-smith-lib-1.18.0-generic_template_expand.patch
 Patch12: e-smith-lib-1.18.0-gauge.patch2
+Patch13: e-smith-lib-1.18.0-shift64.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -36,6 +37,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Mon May 21 2007 Shad L. Lords <slords@mail.com> 1.18.0-15
+- Fix ip addr shift to work on 64-bit
+
 * Sun Apr 29 2007 Shad L. Lords <slords@mail.com>
 - Clean up spec so package can be built by koji/plague
 
@@ -691,6 +695,7 @@ e-smith server and gateway software - library module.
 %patch10 -p1
 #%patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 %pre
 # Remove legacy symlink if one exists
