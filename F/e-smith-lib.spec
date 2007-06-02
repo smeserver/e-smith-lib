@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 15
+%define release 16
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -21,6 +21,7 @@ Patch10: e-smith-lib-1.18.0-logfile_rotation.patch
 Patch11: e-smith-lib-1.18.0-generic_template_expand.patch
 Patch12: e-smith-lib-1.18.0-gauge.patch2
 Patch13: e-smith-lib-1.18.0-shift64.patch
+Patch14: e-smith-lib-1.18.0-passlength.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -37,6 +38,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Fri Jun 1 2007 Shad L. Lords <slords@mail.com> 1.18.0-16
+- pam_unix requires passwords >= 6 [SME: 3039]
+
 * Mon May 21 2007 Shad L. Lords <slords@mail.com> 1.18.0-15
 - Fix ip addr shift to work on 64-bit
 
@@ -696,6 +700,7 @@ e-smith server and gateway software - library module.
 #%patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
 
 %pre
 # Remove legacy symlink if one exists
