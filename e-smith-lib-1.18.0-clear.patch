@@ -1,0 +1,35 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2007-02-23 08:26:55.000000000 -0700
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2007-02-23 08:14:24.000000000 -0700
+@@ -233,8 +233,8 @@
+     $self->screen ("--title",  $title,
+                    "--cancel-label",   $left,
+                    "--ok-label",  $right,
+-                   "--msgbox", $message_box,
+                    "--clear",
++                   "--msgbox", $message_box,
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
+                   );
+@@ -261,8 +261,8 @@
+     $self->screen ("--title",  $title,
+                    "--cancel-label",  gettext("Back"),
+                    "--ok-label", gettext("Next"),
+-                   "--msgbox", $message_box,
+                    "--clear",
++                   "--msgbox", $message_box,
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
+                   );
+@@ -286,10 +286,10 @@
+     my $right = defined $params{right} ? $params{right} : gettext("Next");
+ 
+     $self->dialog ("--title",  $title,
+-                   "--clear",
+                    "--insecure",
+                    "--cancel-label",  $left,
+                    "--ok-label", $right,
++                   "--clear",
+                    "--passwordbox", "\n" . $message_box,
+                    SCREEN_ROWS,
+                    SCREEN_COLUMNS,
