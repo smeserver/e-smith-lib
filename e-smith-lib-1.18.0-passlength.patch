@@ -1,0 +1,25 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/util.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/util.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/util.pm	2007-06-01 13:04:14.000000000 -0600
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/util.pm	2007-06-01 13:03:57.000000000 -0600
+@@ -565,17 +565,16 @@
+     use Crypt::Cracklib;
+ 
+     $strength ||= 'normal';
+-    return 'ok' if ($strength eq 'none');
+ 
+     my $reason = 'ok';
++    $reason = 'it is too short' unless (length($password) > 6);
++    return $reason if ($reason ne 'ok' || $strength eq 'none');
++
+     $reason = 'it does not contain numbers' if (not $password =~ /\d/);
+     $reason = 'it does not contain uppercase characters' if (not $password =~ /[A-Z]/);
+     $reason = 'it does not contain lowercase characters' if (not $password =~ /[a-z]/);
+     $reason = 'it does not contain special characters' if (not $password =~ /\W|_/);
+-    $reason = 'it is too short' if (not length($password) > 6);
+-
+-    return $reason unless ($reason eq 'ok');
+-    return 'ok' unless ($strength eq "strong");
++    return $reason unless ($reason eq 'ok' || $strength eq 'strong');
+ 
+     $reason = fascist_check($password, '/usr/lib/cracklib_dict');
+     $reason ||= 'the password check failed';
