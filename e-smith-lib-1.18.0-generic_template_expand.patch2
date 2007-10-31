@@ -1,0 +1,25 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/etc/e-smith/events/actions/generic_template_expand mezzanine_patched_e-smith-lib-1.18.0/root/etc/e-smith/events/actions/generic_template_expand
+--- e-smith-lib-1.18.0/root/etc/e-smith/events/actions/generic_template_expand	2007-10-31 15:56:47.000000000 -0400
++++ mezzanine_patched_e-smith-lib-1.18.0/root/etc/e-smith/events/actions/generic_template_expand	2007-10-31 15:53:58.000000000 -0400
+@@ -52,18 +52,10 @@
+     # processTemplate args, then expand the template
+     s/^\.//;
+     $filename = $_;
+-    %args = (
++    warn "expanding $filename\n";
++    esmith::templates::processTemplate({
+ 		MORE_DATA => { EVENT => $event },
+ 		TEMPLATE_PATH => $filename,
+ 		OUTPUT_FILENAME => $filename,
+-	    );
+-    open(FILE, "${templates_dir}${filename}");
+-    while (<FILE>)
+-    {
+-	($param, $value) = split(/=/, $_, 2);
+-	$args{$param} = eval $value; warn $@ if $@;
+-    }
+-    close(FILE);
+-    warn "expanding $filename\n";
+-    esmith::templates::processTemplate(\%args);
++	    });
+ }
