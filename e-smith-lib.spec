@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 17
+%define release 18
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -23,6 +23,7 @@ Patch12: e-smith-lib-1.18.0-gauge.patch2
 Patch13: e-smith-lib-1.18.0-shift64.patch
 Patch14: e-smith-lib-1.18.0-passlength.patch
 Patch15: e-smith-lib-1.18.0-generic_template_expand.patch2
+Patch16: e-smith-lib-1.18.0-FixFileDescriptorLeak.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -39,6 +40,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Thu Nov 01 2007 Gavin Weight <gweight@gmail.com> 1.18.0-18
+- Fix I18N.pm file descriptor leak. [SME: 3509]
+
 * Wed Oct 31 2007 Charlie Brady <charlie_brady@mitel.com> 1.18.0-17
 - Remove undocumented and unused template metadata handling from
   generic_template_expand action (Take II). [SME: 2798]
@@ -707,6 +711,7 @@ e-smith server and gateway software - library module.
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
+%patch16 -p1
 
 %pre
 # Remove legacy symlink if one exists

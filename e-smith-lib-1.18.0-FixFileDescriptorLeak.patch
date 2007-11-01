@@ -1,0 +1,22 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/I18N.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/I18N.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/I18N.pm	2006-02-17 03:52:14.000000000 +0000
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/I18N.pm	2007-11-01 20:06:45.000000000 +0000
+@@ -93,6 +93,7 @@
+ 		 -f "$localedir/$locale/LC_MESSAGES/server-console.po");
+     }
+ 
++    closedir LOCALE;
+     return @locales;
+ }
+ 
+@@ -262,7 +263,9 @@
+ 
+     return () unless opendir LOCALE, $localedir;
+ 
+-    return grep(!/\./, readdir LOCALE);
++    my @locales = grep(!/\./, readdir LOCALE);
++    closedir LOCALE;
++    return @locales;
+ }
+ 
+ =head2 fallbackLanguage()
