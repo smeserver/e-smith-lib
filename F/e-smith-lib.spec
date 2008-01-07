@@ -41,7 +41,7 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
-* Tue Jan 08 2007 Stephen Noble <support@dungog.net> 1.18.0-19
+* Tue Jan 08 2008 Stephen Noble <support@dungog.net> 1.18.0-19
 - modify validate password strong match for console [SME: 2173]
 
 * Thu Nov 01 2007 Gavin Weight <gweight@gmail.com> 1.18.0-18
