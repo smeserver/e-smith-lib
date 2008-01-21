@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 19
+%define release 20
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -25,6 +25,7 @@ Patch14: e-smith-lib-1.18.0-passlength.patch
 Patch15: e-smith-lib-1.18.0-generic_template_expand.patch2
 Patch16: e-smith-lib-1.18.0-FixFileDescriptorLeak.patch
 Patch17: e-smith-lib-1.18.0-validatePassword.patch
+Patch18: e-smith-lib-1.18.0-re_enable_locked_user.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -41,6 +42,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Sun Jan 20 2008 Gavin Weight <gweight@gmail.com> 1.18.0-20
+- Call smbpasswd -e - to reset user correctly. [SME: 3755]
+
 * Tue Jan 08 2008 Stephen Noble <support@dungog.net> 1.18.0-19
 - modify validate password strong match for console [SME: 2173]
 
@@ -717,6 +721,7 @@ e-smith server and gateway software - library module.
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
+%patch18 -p1
 
 %pre
 # Remove legacy symlink if one exists
