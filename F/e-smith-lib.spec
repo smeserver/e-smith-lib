@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 20
+%define release 21
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -26,6 +26,7 @@ Patch15: e-smith-lib-1.18.0-generic_template_expand.patch2
 Patch16: e-smith-lib-1.18.0-FixFileDescriptorLeak.patch
 Patch17: e-smith-lib-1.18.0-validatePassword.patch
 Patch18: e-smith-lib-1.18.0-re_enable_locked_user.patch
+Patch19: e-smith-lib-1.18.0-UTF8.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -42,6 +43,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Mon Mar 10 2008 Shad L. Lords <slords@mail.com> 1.18.0-21
+- Output navigation in UTF-8 [SME: 3858]
+
 * Sun Jan 20 2008 Gavin Weight <gweight@gmail.com> 1.18.0-20
 - Call smbpasswd -e - to reset user correctly. [SME: 3755]
 
@@ -722,6 +726,7 @@ e-smith server and gateway software - library module.
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
 
 %pre
 # Remove legacy symlink if one exists
