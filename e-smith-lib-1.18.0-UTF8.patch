@@ -1,0 +1,30 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/cgi.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/cgi.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/cgi.pm	2007-01-26 18:51:29.000000000 -0700
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/cgi.pm	2008-03-10 18:32:38.000000000 -0600
+@@ -80,7 +80,7 @@
+ {
+     my ($q, $confref, $title, $expiry, $checkpassword) = @_;
+ 
+-    print $q->header (-EXPIRES => $expiry);
++    print $q->header (-EXPIRES => $expiry, charset => 'UTF-8');
+ 
+     genHeaderStartHTML ($q, "panel_main");
+ 
+@@ -97,7 +97,7 @@
+ {
+     my ($q, $num) = @_;
+ 
+-    print $q->header (-EXPIRES => '-20y');
++    print $q->header (-EXPIRES => '-20y', charset => 'UTF-8');
+ 
+     genHeaderStartHTML ($q, "panel_nav", $num);
+ }
+@@ -112,7 +112,7 @@
+ {
+     my ($q) = @_;
+ 
+-    print $q->header (-EXPIRES => '-20y');
++    print $q->header (-EXPIRES => '-20y', charset => 'UTF-8');
+     genHeaderStartHTML ($q, "panel_main");
+ }
+ 
