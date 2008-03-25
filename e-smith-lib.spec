@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 21
+%define release 22
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -27,6 +27,7 @@ Patch16: e-smith-lib-1.18.0-FixFileDescriptorLeak.patch
 Patch17: e-smith-lib-1.18.0-validatePassword.patch
 Patch18: e-smith-lib-1.18.0-re_enable_locked_user.patch
 Patch19: e-smith-lib-1.18.0-UTF8.patch
+Patch20: e-smith-lib-1.18.0-UTF8.patch2
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -43,6 +44,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Tue Mar 25 2008 Shad L. Lords <slords@mail.com> 1.18.0-22
+- Fix wide output to syslog and allow navigations db to be utf8 [SME: 4101]
+
 * Mon Mar 10 2008 Shad L. Lords <slords@mail.com> 1.18.0-21
 - Output navigation in UTF-8 [SME: 3858]
 
@@ -727,6 +731,7 @@ e-smith server and gateway software - library module.
 %patch17 -p1
 %patch18 -p1
 %patch19 -p1
+%patch20 -p1
 
 %pre
 # Remove legacy symlink if one exists
