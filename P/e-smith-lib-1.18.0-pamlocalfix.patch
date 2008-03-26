@@ -1,0 +1,57 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/util.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/util.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/util.pm	2008-03-26 10:22:29.000000000 -0600
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/util.pm	2008-03-26 10:22:05.000000000 -0600
+@@ -637,10 +637,10 @@
+ {
+     my ( $username, $oldpassword, $newpassword ) = @_;
+     use Authen::PAM;
++    my $state;
+ 
+     my $my_conv_func = sub {
+         my @res;
+-        my $state = 0;
+         while (@_)
+         {
+             my $code = shift;
+@@ -650,23 +650,14 @@
+             $ans = $username if ( $code == PAM_PROMPT_ECHO_ON() );
+             if ( $code == PAM_PROMPT_ECHO_OFF() )
+             {
+-                if ( $state >= 1 || $msg =~ /new/i )
++                if ( $< == 0 || $state >= 1 )
+                 {
+-
+                     # are we asked for a new password
+                     $ans = $newpassword;
+                 }
+-                elsif ( $msg =~ /^Password:\s*$/i )
+-                {
+-
+-                    # asked for old password before we can set a new one.
+-                    $ans = $oldpassword;
+-                }
+                 else
+                 {
+-
+-                    # We shouldn't get here. Just provide a non-sensical
+-                    # "old password", if we do.
++                    # asked for old password before we can set a new one.
+                     $ans = $oldpassword;
+                 }
+                 $state++;
+@@ -691,6 +682,7 @@
+     # one.
+     # This does that, except if you're already root, such as from the
+     # bootstrap-console
++    $state = 0;
+     unless ( $< == 0 or $pamh->pam_authenticate == 0 )
+     {
+         warn
+@@ -698,6 +690,7 @@
+         return 0;
+     }
+ 
++    $state = 0;
+     my $res = $pamh->pam_chauthtok;
+     unless ( $res == PAM_SUCCESS() )
+     {
