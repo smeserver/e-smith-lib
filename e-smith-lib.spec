@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 22
+%define release 23
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -28,6 +28,7 @@ Patch17: e-smith-lib-1.18.0-validatePassword.patch
 Patch18: e-smith-lib-1.18.0-re_enable_locked_user.patch
 Patch19: e-smith-lib-1.18.0-UTF8.patch
 Patch20: e-smith-lib-1.18.0-UTF8.patch2
+Patch21: e-smith-lib-1.18.0-pamlocalfix.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -44,6 +45,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Wed Mar 26 2008 Shad L. Lords <slords@mail.com> 1.18.0-23
+- Make PAM conv routine not look for english strings [SME: 4117]
+
 * Tue Mar 25 2008 Shad L. Lords <slords@mail.com> 1.18.0-22
 - Fix wide output to syslog and allow navigations db to be utf8 [SME: 4101]
 
@@ -732,6 +736,7 @@ e-smith server and gateway software - library module.
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
+%patch21 -p1
 
 %pre
 # Remove legacy symlink if one exists
