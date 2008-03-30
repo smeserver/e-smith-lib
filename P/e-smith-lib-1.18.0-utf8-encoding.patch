@@ -1,0 +1,12 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/config.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/config.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/config.pm	2008-03-30 16:39:58.000000000 -0600
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/config.pm	2008-03-30 16:39:28.000000000 -0600
+@@ -185,7 +185,7 @@
+         return \%config;
+     }
+ 
+-    binmode(FH, ":utf8") if $filename =~ m{navigation};
++    binmode(FH, ":encoding(UTF-8)") if $filename =~ m{navigation};
+     while (my $line = <FH>)
+     {
+         chomp $line;
