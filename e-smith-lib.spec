@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 23
+%define release 24
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -29,6 +29,7 @@ Patch18: e-smith-lib-1.18.0-re_enable_locked_user.patch
 Patch19: e-smith-lib-1.18.0-UTF8.patch
 Patch20: e-smith-lib-1.18.0-UTF8.patch2
 Patch21: e-smith-lib-1.18.0-pamlocalfix.patch
+Patch22: e-smith-lib-1.18.0-utf8-encoding.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -45,6 +46,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Sun Mar 30 2008 Shad L. Lords <slords@mail.com> 1.18.0-24
+- Gracefully handle encoding errors in navigation dbs [SME: 4147]
+
 * Wed Mar 26 2008 Shad L. Lords <slords@mail.com> 1.18.0-23
 - Make PAM conv routine not look for english strings [SME: 4117]
 
@@ -737,6 +741,7 @@ e-smith server and gateway software - library module.
 %patch19 -p1
 %patch20 -p1
 %patch21 -p1
+%patch22 -p1
 
 %pre
 # Remove legacy symlink if one exists
