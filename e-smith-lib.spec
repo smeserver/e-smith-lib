@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 24
+%define release 25
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -30,6 +30,7 @@ Patch19: e-smith-lib-1.18.0-UTF8.patch
 Patch20: e-smith-lib-1.18.0-UTF8.patch2
 Patch21: e-smith-lib-1.18.0-pamlocalfix.patch
 Patch22: e-smith-lib-1.18.0-utf8-encoding.patch
+Patch23: e-smith-lib-1.18.0-i18n.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -46,6 +47,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Wed Apr 2 2008 Shad L. Lords <slords@mail.com> 1.18.0-25
+- Add .utf8 to locale unless server-console [SME: 4162]
+- Add new languages to langtag2locale [SME: 4163]
+
 * Sun Mar 30 2008 Shad L. Lords <slords@mail.com> 1.18.0-24
 - Gracefully handle encoding errors in navigation dbs [SME: 4147]
 
@@ -742,6 +747,7 @@ e-smith server and gateway software - library module.
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
+%patch23 -p1
 
 %pre
 # Remove legacy symlink if one exists
