@@ -49,7 +49,7 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
-* Wed Apr 2 2008 Shad L. Lords <slords@mail.com> 1.18.0-26
+* Thu Jul 31 2008 Shad L. Lords <slords@mail.com> 1.18.0-26
 - Make binmode properties of db class [SME: 4317]
 - Add new navigation db & utf8 classes [SME: 4317]
 
