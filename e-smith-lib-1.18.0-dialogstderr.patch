@@ -1,0 +1,59 @@
+diff -Nur -x '*.orig' -x '*.rej' e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm
+--- e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2008-08-09 10:14:41.000000000 -0600
++++ mezzanine_patched_e-smith-lib-1.18.0/root/usr/lib/perl5/site_perl/esmith/console.pm	2008-08-09 10:14:17.000000000 -0600
+@@ -124,7 +124,7 @@
+ 
+ sub whiptail
+ {
+-    _screen(shift, "/sbin/e-smith/whiptail", @_);
++    _screen(shift, "/usr/bin/whiptail", @_);
+ }
+ 
+ sub _screen
+@@ -155,24 +155,32 @@
+         # Child
+         #----------------------------------------
+ 
+-        # whiptail sends its output via STDERR.  We temporarily
+-        # shut off warnings so they don't interfere with that.
+-        local $^W = 0;
+-
+         # Attach child's STDIN to the reading end of the pipe
+-
+         close READER
+             or die gettext("Couldn't close reading end of pipe") , ": $!\n";
+ 
+-        open  STDERR, ">& WRITER"
+-            or die gettext("Couldn't connect STDERR to pipe"), ": $!\n";
+-
+-        close WRITER
+-            or die gettext("Couldn't close writing end of pipe"), ": $!\n";
+-
+-
+-        unshift @whiptailArgs, $whiptail,
+-            '--backtitle', $self->backtitle;
++        if ($whiptail =~ m{\bwhiptail$} ) {
++            # whiptail sends its output via STDERR.  We temporarily
++            # shut off warnings so they don't interfere with that.
++            local $^W = 0;
++
++            open  STDERR, ">& WRITER"
++                or die gettext("Couldn't connect STDERR to pipe"), ": $!\n";
++
++            close WRITER
++                or die gettext("Couldn't close writing end of pipe"), ": $!\n";
++
++            unshift @whiptailArgs, $whiptail,
++                '--backtitle', $self->backtitle;
++        } else {
++            use Fcntl qw/F_SETFD/;
++
++            # Clear close-on-exec on WRITER so that it stays open for dialog to use
++            fcntl(WRITER, F_SETFD, 0);
++
++            unshift @whiptailArgs, $whiptail,
++                '--backtitle', $self->backtitle, "--output-fd", fileno(WRITER);
++        }
+         exec @whiptailArgs;
+         die gettext("Couldn't exec:"), ": $!\n";
+     }
