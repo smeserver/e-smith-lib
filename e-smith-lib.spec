@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 26
+%define release 27
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -33,12 +33,13 @@ Patch22: e-smith-lib-1.18.0-utf8-encoding.patch
 Patch23: e-smith-lib-1.18.0-i18n.patch
 Patch24: e-smith-lib-1.18.0-binmode.patch
 Patch25: e-smith-lib-1.18.0-navigationdb.patch
+Patch26: e-smith-lib-1.18.0-dialogstderr.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
 Obsoletes: %{name}-Tai64n
+Obsoletes: whiptail
 Requires: dialog
-Requires: whiptail
 Requires: perl, perl(Text::Template)
 Requires: perl(Time::HiRes), perl(MIME::Base64)
 Requires: perl(Authen::PAM), perl(I18N::AcceptLanguage)
@@ -49,6 +50,10 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Sat Aug 9 2008 Shad L. Lords <slords@mail.com> 1.18.0-27
+- Make dialog not use STDERR for return values [SME: 3663]
+- Remove requires for whiptail.  No longer needed [SME: 4491]
+
 * Thu Jul 31 2008 Shad L. Lords <slords@mail.com> 1.18.0-26
 - Make binmode properties of db class [SME: 4317]
 - Add new navigation db & utf8 classes [SME: 4317]
@@ -756,6 +761,7 @@ e-smith server and gateway software - library module.
 %patch23 -p1
 %patch24 -p1
 %patch25 -p1
+%patch26 -p1
 
 %pre
 # Remove legacy symlink if one exists
