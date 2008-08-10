@@ -2,7 +2,7 @@ Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 1.18.0
-%define release 27
+%define release 28
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -34,6 +34,7 @@ Patch23: e-smith-lib-1.18.0-i18n.patch
 Patch24: e-smith-lib-1.18.0-binmode.patch
 Patch25: e-smith-lib-1.18.0-navigationdb.patch
 Patch26: e-smith-lib-1.18.0-dialogstderr.patch
+Patch27: e-smith-lib-1.18.0-urandom.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -50,6 +51,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Sat Aug 9 2008 Shad L. Lords <slords@mail.com> 1.18.0-28
+- Read /dev/urandmon instead of /dev/random [SME: 4492]
+
 * Sat Aug 9 2008 Shad L. Lords <slords@mail.com> 1.18.0-27
 - Make dialog not use STDERR for return values [SME: 3663]
 - Remove requires for whiptail.  No longer needed [SME: 4491]
@@ -762,6 +766,7 @@ e-smith server and gateway software - library module.
 %patch24 -p1
 %patch25 -p1
 %patch26 -p1
+%patch27 -p1
 
 %pre
 # Remove legacy symlink if one exists
