@@ -1,40 +1,13 @@
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
-%define version 1.18.0
-%define release 28
+%define version 1.19.0
+%define release 1
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
-Patch1: e-smith-lib-1.18.0-backtitle.patch
-Patch2: e-smith-lib-1.18.0-infobox.patch
-Patch3: e-smith-lib-1.18.0-password_page.patch
-Patch4: e-smith-lib-1.18.0-clear.patch
-Patch5: e-smith-lib-1.18.0-clear.patch2
-Patch6: e-smith-lib-1.18.0-infobox.patch2
-Patch7: e-smith-lib-1.18.0-gauge.patch
-Patch8: e-smith-lib-1.18.0-templates.metadata.patch
-Patch9: e-smith-lib-1.18.0-templates.metadata.patch2
-Patch10: e-smith-lib-1.18.0-logfile_rotation.patch
-Patch11: e-smith-lib-1.18.0-generic_template_expand.patch
-Patch12: e-smith-lib-1.18.0-gauge.patch2
-Patch13: e-smith-lib-1.18.0-shift64.patch
-Patch14: e-smith-lib-1.18.0-passlength.patch
-Patch15: e-smith-lib-1.18.0-generic_template_expand.patch2
-Patch16: e-smith-lib-1.18.0-FixFileDescriptorLeak.patch
-Patch17: e-smith-lib-1.18.0-validatePassword.patch
-Patch18: e-smith-lib-1.18.0-re_enable_locked_user.patch
-Patch19: e-smith-lib-1.18.0-UTF8.patch
-Patch20: e-smith-lib-1.18.0-UTF8.patch2
-Patch21: e-smith-lib-1.18.0-pamlocalfix.patch
-Patch22: e-smith-lib-1.18.0-utf8-encoding.patch
-Patch23: e-smith-lib-1.18.0-i18n.patch
-Patch24: e-smith-lib-1.18.0-binmode.patch
-Patch25: e-smith-lib-1.18.0-navigationdb.patch
-Patch26: e-smith-lib-1.18.0-dialogstderr.patch
-Patch27: e-smith-lib-1.18.0-urandom.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -51,6 +24,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Sat Aug 9 2008 Shad L. Lords <slords@mail.com> 1.19.0-1
+- Roll new dev stream.
+
 * Sat Aug 9 2008 Shad L. Lords <slords@mail.com> 1.18.0-28
 - Read /dev/urandmon instead of /dev/random [SME: 4492]
 
@@ -740,33 +716,6 @@ e-smith server and gateway software - library module.
 
 %prep
 %setup
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-#%patch11 -p1
-%patch12 -p1
-%patch13 -p1
-%patch14 -p1
-%patch15 -p1
-%patch16 -p1
-%patch17 -p1
-%patch18 -p1
-%patch19 -p1
-%patch20 -p1
-%patch21 -p1
-%patch22 -p1
-%patch23 -p1
-%patch24 -p1
-%patch25 -p1
-%patch26 -p1
-%patch27 -p1
 
 %pre
 # Remove legacy symlink if one exists
