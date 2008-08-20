@@ -24,7 +24,7 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
-* Sat Aug 9 2008 Shad L. Lords <slords@mail.com> 1.19.0-1
+* Wed Aug 20 2008 Shad L. Lords <slords@mail.com> 1.19.0-1
 - Roll new dev stream.
 
 * Sat Aug 9 2008 Shad L. Lords <slords@mail.com> 1.18.0-28
