@@ -1,0 +1,15 @@
+--- e-smith-lib-2.0.0/root/usr/lib/perl5/site_perl/esmith/ConfigDB.pm.sambaRole	2005-07-19 11:13:46.000000000 -0600
++++ e-smith-lib-2.0.0/root/usr/lib/perl5/site_perl/esmith/ConfigDB.pm	2008-10-13 11:49:27.000000000 -0600
+@@ -278,10 +278,10 @@
+ 
+     return $wins_server if $wins_server;
+ 
+-    my $domain_master = $self->get_prop( 'smb', 'DomainMaster' ) || 'no';
++    my $server_role = $self->get_prop( 'smb', 'ServerRole' ) || 'WS';
+ 
+     return $self->get_prop( 'InternalInterface', 'IPAddress' )
+-      if ( $domain_master eq 'yes' );
++      if $server_role =~ m{^(PDC|ADS)$};
+ 
+     return undef;
+ }
