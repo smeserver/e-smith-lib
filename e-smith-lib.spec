@@ -1,16 +1,17 @@
-# $Id: e-smith-lib.spec,v 1.18 2008/10/13 21:48:13 slords Exp $
+# $Id: e-smith-lib.spec,v 1.19 2009/12/09 23:49:22 charliebrady Exp $
 
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 2.2.0
-%define release 2
+%define release 3
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch1: e-smith-lib-2.2.0-sambaRole.patch
+Patch2: e-smith-lib-2.2.0-UniqueUid.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -27,6 +28,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Wed Dec  9 2009 Charlie Brady <charlieb@budge.apana.org.au> 2.2.0-3.sme
+- Add patch to prevent re-use of uids. [SME: 5659]
+
 * Mon Oct 13 2008 Shad L. Lords <slords@mail.com> 2.2.0-2.sme
 - Add patch to support multiple samba roles [SME: 4172]
 
@@ -725,6 +729,7 @@ e-smith server and gateway software - library module.
 
 %prep
 %setup
+%patch1 -p1
 %patch1 -p1
 
 %pre
