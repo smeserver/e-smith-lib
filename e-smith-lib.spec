@@ -1,10 +1,10 @@
-# $Id: e-smith-lib.spec,v 1.20 2009/12/09 23:51:31 charliebrady Exp $
+# $Id: e-smith-lib.spec,v 1.21 2009/12/22 18:09:13 filippocarletti Exp $
 
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 2.2.0
-%define release 3
+%define release 4
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -28,6 +28,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Tue Dec 22 2009 Filippo Carletti <filippo.carletti@gmail.com> 2.2.0-4.sme
+- Really apply previous patch in the spec file. [SME: 5659]
+
 * Wed Dec  9 2009 Charlie Brady <charlieb@budge.apana.org.au> 2.2.0-3.sme
 - Add patch (Federico Simoncelli) to prevent re-use of uids. [SME: 5659]
 
@@ -730,7 +733,7 @@ e-smith server and gateway software - library module.
 %prep
 %setup
 %patch1 -p1
-%patch1 -p1
+%patch2 -p1
 
 %pre
 # Remove legacy symlink if one exists
