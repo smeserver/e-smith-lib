@@ -1,0 +1,16 @@
+diff -up e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/util.pm.lib64 e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/util.pm
+--- e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/util.pm.lib64	2008-10-07 11:36:09.000000000 -0600
++++ e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/util.pm	2010-02-04 11:44:59.000000000 -0700
+@@ -576,7 +576,11 @@ sub validatePassword($$)
+     $reason = 'it does not contain special characters' if (not $password =~ /\W|_/);
+     return $reason if ($reason ne 'ok' && $strength eq 'strong');
+ 
+-    $reason = fascist_check($password, '/usr/lib/cracklib_dict');
++    if ( -f '/usr/lib64/cracklib_dict.pwd' ) {
++        $reason = fascist_check($password, '/usr/lib64/cracklib_dict');
++    } else {
++        $reason = fascist_check($password, '/usr/lib/cracklib_dict');
++    }
+     $reason ||= 'the password check failed';
+ 
+     return 'ok' if (lc($reason) eq 'ok');

@@ -1,10 +1,10 @@
-# $Id: e-smith-lib.spec,v 1.21 2009/12/22 18:09:13 filippocarletti Exp $
+# $Id: e-smith-lib.spec,v 1.22 2010/02/04 19:06:30 slords Exp $
 
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 2.2.0
-%define release 4
+%define release 5
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -12,6 +12,7 @@ Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch1: e-smith-lib-2.2.0-sambaRole.patch
 Patch2: e-smith-lib-2.2.0-UniqueUid.patch
+Patch3: e-smith-lib-2.2.0-lib64.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -28,6 +29,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Thu Feb 4 2010 Shad L. Lords <slords@mail.com> 2.2.0-5.sme
+- Update path for 64-bit compatibility [SME: 5756]
+
 * Tue Dec 22 2009 Filippo Carletti <filippo.carletti@gmail.com> 2.2.0-4.sme
 - Really apply previous patch in the spec file. [SME: 5659]
 
@@ -734,6 +738,7 @@ e-smith server and gateway software - library module.
 %setup
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %pre
 # Remove legacy symlink if one exists
