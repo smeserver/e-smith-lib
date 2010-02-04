@@ -1,16 +1,17 @@
-# $Id: e-smith-lib.spec,v 1.16 2008/10/13 21:48:13 slords Exp $
+# $Id: e-smith-lib.spec,v 1.17 2010/02/04 19:06:30 slords Exp $
 
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 2.0.0
-%define release 2
+%define release 3
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch1: e-smith-lib-2.0.0-sambaRole.patch
+Patch2: e-smith-lib-2.0.0-lib64.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -27,6 +28,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Thu Feb 4 2010 Shad L. Lords <slords@mail.com> 2.0.0-3.sme
+- Update path for 64-bit compatibility [SME: 5755]
+
 * Mon Oct 13 2008 Shad L. Lords <slords@mail.com> 2.0.0-2.sme
 - Add patch to support multiple samba roles [SME: 4172]
 
@@ -723,6 +727,7 @@ e-smith server and gateway software - library module.
 %prep
 %setup
 %patch1 -p1
+%patch2 -p1
 
 %pre
 # Remove legacy symlink if one exists
