@@ -1,0 +1,245 @@
+--- e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/ethernet.pm	2006-10-12 01:14:18.000000000 +1000
++++ e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/ethernet.pm.new	2010-02-05 18:59:46.000000000 +1100
+@@ -26,204 +26,6 @@
+ 
+ This module contains routines for 
+ 
+-=cut
+-
+-#----------------------------------------------------------------------
+-# Private variables
+-#----------------------------------------------------------------------
+-
+-my %private_pci_network_cards;
+-my %private_pci_network_drivers;
+-
+-BEGIN
+-{
+-
+-    # All the routines below need the arrays, so populate them on entry.
+-
+-    my $proc_version = "/proc/version";
+-
+-    open( VERSION, "$proc_version" )
+-      or warn "Could not open $proc_version for reading. $!\n";
+-
+-    my $kernel = ( split( ' ', <VERSION> ) )[2];
+-    close VERSION;
+-
+-    my @modules_path = (
+-        "/lib/modules/" . $kernel . "/kernel/net",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/net",
+-        "/lib/modules/" . $kernel . "/unsupported/drivers/net",
+-        "/lib/modules/" . $kernel . "/kernel/drivers/addon",
+-    );
+-
+-    sub find_modules
+-    {
+-        my @paths = @_;
+-        my %modules_hash = ();
+-        local *DIR;
+-        foreach my $path (@paths)
+-        {
+-            next unless -d $path;
+-            opendir (DIR, $path)
+-                or die "Failed to open directory $path: $!\n";
+-            while (my $entry = readdir(DIR))
+-            {
+-                next if $entry =~ /^\./;
+-                my $fullpath = "$path/$entry";
+-                if (-d $fullpath)
+-                {
+-                    %modules_hash = (%modules_hash, find_modules($fullpath));
+-                }
+-                else
+-                {
+-                    if ($entry =~ /\.k?o$/)
+-                    {
+-                        $entry =~ s/(.+)\.k?o$//;
+-                        $modules_hash{$1} = 1;
+-                    }
+-                }
+-            }
+-            closedir(DIR);
+-        }
+-        return %modules_hash;
+-    }
+-
+-    my %network_drivers = find_modules(@modules_path);
+-
+-    my $pcitable = "/usr/share/hwdata/pcitable";
+-
+-    unless ( open( PCITABLE, $pcitable )
+-        || open( PCITABLE, $pcitable = "/usr/share/kudzu/pcitable" ) )
+-    {
+-        warn "Could not open pci table $pcitable: $!\n";
+-        return;
+-    }
+-
+-    my %descriptions;
+-
+-    while (<PCITABLE>)
+-    {
+-        next if (/^\s*#|^\s*$/);
+-
+-        chomp;
+-        my @f = split(/\t/);
+-
+-        next if ( $f[2] =~ /^0x/ );    # Can't handle sub vendor IDs yet.
+-
+-        $f[0] =~ s/^0x//;
+-        $f[1] =~ s/^0x//;
+-        $f[2] =~ s/"//g;
+-	# Gracefully handle CentOS4 pcitable format
+-        $f[3] ||= "(no description)";
+-        $f[3] =~ s/"//g;
+-
+-        if ( exists $network_drivers{ $f[2] } )
+-        {
+-            my $card = $f[0] . ":" . $f[1];
+-            $private_pci_network_cards{$card}{driver}      = $f[2];
+-            $private_pci_network_cards{$card}{description} = $f[3];
+-
+-            my $description = $f[3];
+-            $description =~ s/\|.*//;
+-
+-            if ( exists $private_pci_network_drivers{ $f[2] } )
+-            {
+-                unless ( exists $descriptions{ $f[2] . $description } )
+-                {
+-                    $private_pci_network_drivers{ $f[2] } .= " or $description";
+-                    ++$descriptions{ $f[2] . $description };
+-                }
+-            }
+-            else
+-            {
+-                $private_pci_network_drivers{ $f[2] } = $description;
+-                ++$descriptions{ $f[2] . $description };
+-            }
+-
+-        }
+-    }
+-
+-    close PCITABLE;
+-}
+-
+-=pod
+-
+-=head2 listDrivers();
+-
+-List the available drivers
+-
+-=cut
+-
+-sub listDrivers ()
+-{
+-    my $driver;
+-    my $drivers = '';
+-
+-    return "\"unknown driver\"\t\"unknown description\" "
+-      unless ( scalar keys %private_pci_network_drivers );
+-
+-    foreach $driver ( sort keys %private_pci_network_drivers )
+-    {
+-        $drivers .=
+-            "\"" . $driver . "\"\t\""
+-          . $private_pci_network_drivers{$driver}
+-          . " based adapter\" ";
+-    }
+-
+-    return $drivers;
+-}
+-
+-=pod
+-
+-=head2 listAdapters();
+-
+-List the available adapter cards
+-
+-=cut
+-
+-sub listAdapters ()
+-{
+-    my $cards = '';
+-
+-    return "\"unknown driver\"\t\"unknown adapter card\" "
+-      unless ( scalar keys %private_pci_network_cards );
+-
+-    foreach ( sort private_card_by_driver keys %private_pci_network_cards )
+-    {
+-        $cards .= "\""
+-          . $private_pci_network_cards{$_}{driver}
+-          . "\"\t\""
+-          . $private_pci_network_cards{$_}{description} . "\" ";
+-    }
+-
+-    return $cards;
+-}
+-
+-=pod 
+-
+-=head2 lookupAdapter($adapter);
+-
+-Find the driver for a particular card
+-
+-=cut
+-
+-sub lookupAdapter ($)
+-{
+-    my $adapter = shift;
+-
+-    return "unknown"
+-      unless ( scalar keys %private_pci_network_cards
+-        && $adapter );
+-
+-    foreach ( sort keys %private_pci_network_cards )
+-    {
+-        if ( $private_pci_network_cards{$_}{description} eq $adapter )
+-        {
+-            return $private_pci_network_cards{$_}{driver};
+-        }
+-    }
+-
+-    return "unknown";
+-}
+ 
+ =pod
+ 
+@@ -237,6 +39,7 @@
+ {
+     my @devs;
+     my $r;
++    local $ENV{PATH} = "/bin:/sbin:/usr/bin:/usr/sbin";
+     unless (open(HWC, "/usr/sbin/kudzu --probe --class network|"))
+     {
+ 	warn "Could not run kudzu probe: $!";
+@@ -263,28 +66,11 @@
+     {
+         $adapters .=
+           "EthernetDriver" . $index++ . "\t" . $nic->{driver} . "\t"
+-          . $nic->{desc} . "\n";
++          . $nic->{'network.hwaddr'} . "\t" . $nic->{desc} . "\n";
+     }
+     return $adapters;
+ }
+ 
+-#----------------------------------------------------------------------
+-# Private method. Sort adapters by their driver type.
+-#----------------------------------------------------------------------
+-
+-sub private_card_by_driver ()
+-{
+-
+-    # Sort the network cards by their driver type
+-
+-    $private_pci_network_cards{$a}{driver}
+-      cmp $private_pci_network_cards{$b}{driver};
+-}
+-
+-
+-END
+-{
+-}
+ 
+ #----------------------------------------------------------------------
+ # Return one to make the import process return success.
