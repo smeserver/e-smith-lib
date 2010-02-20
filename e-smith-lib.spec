@@ -1,10 +1,10 @@
-# $Id: e-smith-lib.spec,v 1.17 2010/02/04 19:06:30 slords Exp $
+# $Id: e-smith-lib.spec,v 1.18 2010/02/20 12:24:56 snetram Exp $
 
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 2.0.0
-%define release 3
+%define release 4
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -12,6 +12,7 @@ Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz
 Patch1: e-smith-lib-2.0.0-sambaRole.patch
 Patch2: e-smith-lib-2.0.0-lib64.patch
+Patch3: e-smith-lib-2.0.0-UniqueUid.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -28,6 +29,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Sat Feb 20 2010 Jonathan Martens <smesevrer-bugzilla@snetram.nl> 2.0.0-4.sme
+- Add patch (Federico Simoncelli) to prevent re-use of uids. [SME: 4969]
+
 * Thu Feb 4 2010 Shad L. Lords <slords@mail.com> 2.0.0-3.sme
 - Update path for 64-bit compatibility [SME: 5755]
 
@@ -728,6 +732,7 @@ e-smith server and gateway software - library module.
 %setup
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %pre
 # Remove legacy symlink if one exists

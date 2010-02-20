@@ -1,0 +1,36 @@
+--- e-smith-lib-2.0.0/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm.bak	2009-01-28 16:13:40.000000000 +0100
++++ e-smith-lib-2.0.0/root/usr/lib/perl5/site_perl/esmith/AccountsDB.pm	2009-01-28 16:18:14.000000000 +0100
+@@ -435,14 +435,17 @@
+     use esmith::ConfigDB;
+ 
+     my $id;
+-    if (my $db = esmith::ConfigDB->open_ro)
++    my $db = esmith::ConfigDB->open || die "Couldn't open config db";
++
++    if ($id = $db->get('MinUid'))
++    {
++        $id = $id->value();
++    }
++    else
+     {
+-        if ($id = $db->get('MinUid'))
+-        {
+-            $id = $id->value();
+-        }
++        $db->new_record('MinUid');
++        $id = 5000;
+     }
+-    $id ||= 5000;
+ 
+     my $maxid = 1 << 31;
+     setpwent();
+@@ -454,6 +457,9 @@
+     }
+     endpwent();
+     endgrent();
++
++    $db->set_value('MinUid', $id + 1);
++
+     return $id;
+ }
+ 
