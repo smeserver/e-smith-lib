@@ -1,0 +1,30 @@
+diff -up e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm.serialize_peers e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm
+--- e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm.serialize_peers	2007-01-26 18:51:29.000000000 -0700
++++ e-smith-lib-2.2.0/root/usr/lib/perl5/site_perl/esmith/tcpsvd.pm	2010-10-11 16:25:37.000000000 -0600
+@@ -29,6 +29,7 @@ Pape's ipsvd package - see http://smarde
+ use esmith::NetworksDB;
+ use esmith::ConfigDB;
+ use esmith::util;
++use esmith::lockfile;
+ use Carp;
+ 
+ =head2 configure_peers($service [, $peers_directory] )
+@@ -95,6 +96,8 @@ sub configure_peers
+ 
+     $nets{'127.0.0.1'} = 1;
+ 
++    # Setup lock on peers directory while we manipulate it
++    my $lock = esmith::lockfile::LockFileOrWait("$peers/local");
+ 
+     # Now manage a set of symlinks to the "local" instructions file
+     foreach my $insfile (readdir (PEERS))
+@@ -129,6 +132,9 @@ sub configure_peers
+ 	symlink "0", "$peers/$gw_ip" or
+ 	      warn "Cannot add instructions file for $peers/$gw_ip: $!\n";
+     }
++
++    # Unlock peers directory
++    $lock && esmith::lockfile::UnlockFile($lock);
+ }
+ 
+ 1;

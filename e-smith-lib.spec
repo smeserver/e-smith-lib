@@ -1,10 +1,10 @@
-# $Id: e-smith-lib.spec,v 1.23 2010/02/05 08:16:59 dungog Exp $
+# $Id: e-smith-lib.spec,v 1.24 2010/10/11 22:27:51 slords Exp $
 
 Summary: e-smith server and gateway - library module
 %define name e-smith-lib
 Name: %{name}
 %define version 2.2.0
-%define release 6
+%define release 7
 Version: %{version}
 Release: %{release}%{?dist}
 License: Artistic
@@ -14,6 +14,7 @@ Patch1: e-smith-lib-2.2.0-sambaRole.patch
 Patch2: e-smith-lib-2.2.0-UniqueUid.patch
 Patch3: e-smith-lib-2.2.0-lib64.patch
 Patch4: e-smith-lib-2.2.0-hwaddr.patch
+Patch5: e-smith-lib-2.2.0-serialize_peers.patch
 BuildRoot: /var/tmp/%{name}-%{version}-%{release}-buildroot
 BuildArchitectures: noarch
 BuildRequires: e-smith-devtools >= 1.6.3-01
@@ -30,6 +31,9 @@ Requires: perl(Net::IPv4Addr) >= 0.10
 e-smith server and gateway software - library module.
 
 %changelog
+* Mon Oct 11 2010 Shad L. Lords <slords@mail.com> 2.2.0-7.sme
+- Serialize configure_peers to prevent errors [SME: 5831]
+
 * Fri Feb 5 2010 Stephen Noble <support@dungog.net> 2.2.0-6.sme
 - adds the hwaddr parameter to probeAdapters() [SME: 4528]
 
@@ -744,6 +748,7 @@ e-smith server and gateway software - library module.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %pre
 # Remove legacy symlink if one exists
